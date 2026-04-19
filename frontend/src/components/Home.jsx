@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import About from "./About";
-import ContactUs from "./Contactus";
+import ContactUs from "./ContactUs";
 import Navbar from "./Navbar";
 
 function Home() {
