@@ -1,4 +1,9 @@
-job_title,skills
-Data Scientist,python machine learning statistics pandas
-Web Developer,html css javascript react node
-Data Analyst,excel sql python visualization
+job_title,skills,description
+Data Analyst,"python sql excel power bi statistics data visualization","Analyze datasets, build dashboards, create reports, and support business decisions."
+Business Analyst,"excel sql communication problem solving documentation analytics","Understand business needs, analyze requirements, and improve processes."
+Machine Learning Intern,"python machine learning pandas numpy statistics scikit-learn","Build predictive models, clean data, and assist in ML experiments."
+Web Developer,"html css javascript react nodejs git responsive design","Develop websites, frontend interfaces, and interactive web applications."
+Backend Developer,"python flask django api sql git database","Build APIs, manage databases, and develop server-side applications."
+UI UX Designer,"figma wireframing prototyping design thinking user research","Design interfaces, user flows, and improve user experience."
+Data Scientist,"python machine learning deep learning pandas numpy statistics sql","Build advanced models, analyze patterns, and generate insights from data."
+Software Developer,"java python dsa oop git database problem solving","Develop software applications using programming, algorithms, and databases."

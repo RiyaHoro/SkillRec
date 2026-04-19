@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  
+from flask_cors import CORS
+from model.recommender import JobRecommender
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
+
+recommender = JobRecommender("data/jobs.csv")
 
 @app.route("/")
 def home():
@@ -16,36 +19,21 @@ def health():
 def recommend():
     data = request.get_json()
 
-    age = data.get("age")
-    education = data.get("education", "")
-    interests = data.get("interests", "")
-    skills = data.get("skills", "")
-    career_goal = data.get("career_goal", "")
+    if not data:
+        return jsonify({"error": "No input data provided"}), 400
 
-    # temporary dummy response
+    recommendations = recommender.recommend_jobs(data, top_n=3)
+
     return jsonify({
         "user_profile": {
-            "age": age,
-            "education": education,
-            "interests": interests,
-            "skills": skills,
-            "career_goal": career_goal
+            "age": data.get("age", ""),
+            "education": data.get("education", ""),
+            "interests": data.get("interests", ""),
+            "skills": data.get("skills", ""),
+            "career_goal": data.get("career_goal", "")
         },
-        "recommended_jobs": [
-            {
-                "job_title": "Data Analyst",
-                "match_score": 0.89,
-                "required_skills": ["Python", "SQL", "Excel", "Visualization"],
-                "missing_skills": ["SQL", "Power BI"]
-            },
-            {
-                "job_title": "Business Analyst",
-                "match_score": 0.76,
-                "required_skills": ["Excel", "Communication", "SQL", "Problem Solving"],
-                "missing_skills": ["SQL", "Communication"]
-            }
-        ]
+        "recommended_jobs": recommendations
     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
