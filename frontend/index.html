@@ -1,0 +1,18 @@
+<!-- index.html -->
+<input type="text" id="skills" placeholder="Enter your skills">
+<button onclick="getJobs()">Recommend</button>
+
+<script>
+async function getJobs() {
+    const skills = document.getElementById("skills").value;
+
+    const res = await fetch("http://127.0.0.1:5000/recommend", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({skills})
+    });
+
+    const data = await res.json();
+    console.log(data);
+}
+</script>
