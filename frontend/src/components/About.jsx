@@ -1,21 +1,14 @@
 function About() {
   return (
-    <div className="max-w-3xl mx-auto mt-16 px-6">
-      <h1 className="text-3xl font-bold mb-4 text-blue-600">About SkillSakhi</h1>
-
-      <p className="text-gray-700 mb-4">
-        SkillSakhi is an AI-powered career recommendation platform designed to 
-        empower women by guiding them toward the right career paths.
+    <div className="max-w-5xl mx-auto text-center">
+      <h2 className="text-4xl font-bold text-blue-600 mb-6">About SkillSakhi</h2>
+      <p className="text-lg text-gray-700 leading-8 mb-4">
+        SkillSakhi is a career guidance platform designed to help students and learners
+        discover the right career path based on their education, interests, skills, and goals.
       </p>
-
-      <p className="text-gray-700 mb-4">
-        It analyzes user profiles including skills, interests, education, and age 
-        to recommend suitable job roles and required skills.
-      </p>
-
-      <p className="text-gray-700">
-        Our mission is to bridge the gap between career aspirations and real-world 
-        job requirements through intelligent recommendations and upskilling guidance.
+      <p className="text-lg text-gray-700 leading-8">
+        Our mission is to provide personalized recommendations, skill gap analysis,
+        and upskilling guidance so users can confidently build their future careers.
       </p>
     </div>
   );
