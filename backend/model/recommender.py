@@ -10,7 +10,72 @@ EDUCATION_ORDER = {
     "graduate": 4,
     "postgraduate": 5
 }
+def parse_training_resources(resource_text):
+    if not resource_text:
+        return []
 
+    resources = []
+    items = str(resource_text).split(";")
+
+    for item in items:
+        parts = [p.strip() for p in item.split("|")]
+        if len(parts) == 3:
+            resources.append({
+                "title": parts[0],
+                "platform": parts[1],
+                "level": parts[2]
+            })
+        elif len(parts) == 2:
+            resources.append({
+                "title": parts[0],
+                "platform": parts[1],
+                "level": "General"
+            })
+        else:
+            resources.append({
+                "title": item.strip(),
+                "platform": "General",
+                "level": "General"
+            })
+
+    return resources
+
+
+def build_learning_roadmap(career_name, missing_skills, matched_skills):
+    roadmap = []
+
+    roadmap.append({
+        "step": 1,
+        "title": "Build Foundation",
+        "description": "Start with the basics of the recommended career and understand the core concepts."
+    })
+
+    if missing_skills:
+        roadmap.append({
+            "step": 2,
+            "title": "Learn Missing Skills",
+            "description": f"Focus on these missing skills first: {', '.join(missing_skills)}."
+        })
+    else:
+        roadmap.append({
+            "step": 2,
+            "title": "Strengthen Existing Skills",
+            "description": "You already match many required skills. Improve speed, confidence, and real application."
+        })
+
+    roadmap.append({
+        "step": 3,
+        "title": "Practice with Small Projects",
+        "description": f"Apply your learning through small practical tasks related to {career_name}."
+    })
+
+    roadmap.append({
+        "step": 4,
+        "title": "Prepare for Opportunities",
+        "description": "Create a portfolio, sample work, or service profile and start applying or offering services."
+    })
+
+    return roadmap
 def normalize_education(education_text):
     text = education_text.lower().strip()
 
@@ -123,7 +188,6 @@ class HybridCareerRecommender:
 
             required_skills = [s.strip() for s in str(row["required_skills"]).split(",") if s.strip()]
             missing_skills = [skill for skill in required_skills if skill.lower() not in user_skills]
-
             matched_skills = [skill for skill in required_skills if skill.lower() in user_skills]
 
             results.append({
@@ -135,8 +199,13 @@ class HybridCareerRecommender:
                 "matched_skills": matched_skills,
                 "missing_skills": missing_skills,
                 "training_resource": row["training_resource"],
+                "training_resources": parse_training_resources(row["training_resource"]),
+                "learning_roadmap": build_learning_roadmap(
+                    row["career_name"],
+                    missing_skills,
+                    matched_skills
+                ),
                 "opportunity_type": row["opportunity_type"],
                 "work_mode": row["work_mode"]
-            })
-
+             })
         return results
