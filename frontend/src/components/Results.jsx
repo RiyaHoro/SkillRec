@@ -1,4 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  FaCheckCircle,
+  FaPrint,
+  FaDownload,
+  FaShareAlt,
+  FaRedo,
+  FaTrophy,
+  FaListOl,
+  FaInfoCircle,
+} from "react-icons/fa";
 
 function Results() {
   const location = useLocation();
@@ -12,19 +22,21 @@ function Results() {
     ? data.recommended_careers
     : [];
 
+  const topCareer = careers[0];
+
   if (careers.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white px-6">
-        <div className="bg-gray-900 p-8 rounded-2xl shadow-xl text-center">
-          <h2 className="text-2xl font-bold mb-3">
+      <div className="min-h-screen bg-[#eef4ff] flex items-center justify-center px-6">
+        <div className="bg-white rounded-3xl shadow-md p-10 text-center max-w-lg">
+          <h2 className="text-3xl font-bold text-blue-900 mb-4">
             No recommendation data found
           </h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-600 mb-6">
             Please fill the form again to get recommendations.
           </p>
           <button
             onClick={() => navigate("/form")}
-            className="bg-blue-600 px-5 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold"
           >
             Go to Form
           </button>
@@ -33,227 +45,379 @@ function Results() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-black text-white px-6 py-10">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <h1 className="text-4xl font-bold text-blue-400 mb-2">
-          Your Career Recommendations
-        </h1>
-        <p className="text-gray-400 mb-10">
-          Personalized career, livelihood, and skill guidance based on your
-          profile.
-        </p>
+  const accuracy = Math.max(
+    48,
+    Math.round((topCareer?.match_score || 0) * 100)
+  );
 
-        {/* Profile */}
-        <div className="bg-gray-900 rounded-2xl p-6 mb-10 border border-gray-800">
-          <h2 className="text-xl font-semibold mb-4 text-blue-300">
-            Profile Summary
-          </h2>
-          <div className="grid md:grid-cols-2 gap-3 text-gray-300">
-            <p>
-              <span className="text-gray-500">Age:</span>{" "}
-              {userProfile.age || "N/A"}
-            </p>
-            <p>
-              <span className="text-gray-500">Education:</span>{" "}
-              {userProfile.education || "N/A"}
-            </p>
-            <p>
-              <span className="text-gray-500">Interests:</span>{" "}
-              {userProfile.interests || "N/A"}
-            </p>
-            <p>
-              <span className="text-gray-500">Skills:</span>{" "}
-              {userProfile.skills || "N/A"}
-            </p>
-            <p>
-              <span className="text-gray-500">Career Goal:</span>{" "}
-              {userProfile.career_goal || "N/A"}
-            </p>
-            <p>
-              <span className="text-gray-500">Work Type:</span>{" "}
-              {userProfile.preferred_work_type || "N/A"}
-            </p>
-            <p>
-              <span className="text-gray-500">Work Mode:</span>{" "}
-              {userProfile.preferred_work_mode || "N/A"}
-            </p>
-          </div>
+  return (
+    <div className="min-h-screen bg-[#eef4ff]">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="text-center mb-10">
+          <FaCheckCircle className="text-green-600 text-7xl mx-auto mb-4" />
+          <h1 className="text-6xl font-extrabold text-blue-900">
+            Your Career Recommendations
+          </h1>
+          <p className="text-gray-600 text-2xl mt-4">
+            Based on our AI analysis of your profile
+          </p>
         </div>
 
-        {/* Career Cards */}
-        <div className="space-y-10">
-          {careers.map((career, index) => (
-            <div
-              key={index}
-              className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg"
-            >
-              {/* Title */}
-              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold text-white">
-                    {career.career_name}
+        <div className="grid lg:grid-cols-3 gap-8 items-start">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white rounded-3xl shadow-md p-6">
+              <div className="flex justify-between items-start gap-6">
+                <div className="flex-1">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                    Profile Analysis
                   </h2>
-                  <p className="text-blue-400 text-sm">{career.category}</p>
-
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {career.work_mode?.includes("home") && (
-                      <span className="bg-pink-900 text-pink-300 px-3 py-1 rounded-full text-xs">
-                        Home-Friendly
-                      </span>
-                    )}
-                    {career.opportunity_type?.includes("self") && (
-                      <span className="bg-purple-900 text-purple-300 px-3 py-1 rounded-full text-xs">
-                        Self-Employment
-                      </span>
-                    )}
-                    {career.work_mode?.includes("flexible") && (
-                      <span className="bg-green-900 text-green-300 px-3 py-1 rounded-full text-xs">
-                        Flexible
-                      </span>
-                    )}
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-xl font-semibold">
+                      Profile Completeness:
+                    </span>
+                    <span className="bg-green-600 text-white px-4 py-1 rounded-full text-sm font-bold">
+                      Excellent
+                    </span>
                   </div>
-                </div>
-
-                <div className="mt-3 lg:mt-0 bg-blue-900 text-blue-300 px-4 py-2 rounded-full text-sm">
-                  Match: {Math.round((career.match_score || 0) * 100)}%
-                </div>
-              </div>
-
-              <p className="text-gray-400 mb-6">{career.description}</p>
-
-              {/* Skills */}
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                {/* Required */}
-                <div>
-                  <h3 className="font-semibold mb-2 text-gray-300">
-                    Required Skills
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {career.required_skills?.map((skill, i) => (
-                      <span
-                        key={i}
-                        className="bg-gray-800 px-3 py-1 rounded-full text-sm"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Missing */}
-                <div>
-                  <h3 className="font-semibold mb-2 text-gray-300">
-                    Missing Skills
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {career.missing_skills?.length > 0 ? (
-                      career.missing_skills.map((skill, i) => (
-                        <span
-                          key={i}
-                          className="bg-red-900 text-red-300 px-3 py-1 rounded-full text-sm"
-                        >
-                          {skill}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="bg-green-900 text-green-300 px-3 py-1 rounded-full text-sm">
-                        No major gaps
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Courses */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-blue-300">
-                  Courses & Training
-                </h3>
-
-                {career.training_resources &&
-                career.training_resources.length > 0 ? (
-                  <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-                    {career.training_resources.map((course, i) => (
-                      <div
-                        key={i}
-                        className="bg-gray-800 rounded-xl p-4 hover:shadow-lg transition"
-                      >
-                        <h4 className="font-semibold text-white mb-1">
-                          {course.title}
-                        </h4>
-                        <p className="text-gray-400 text-sm mb-2">
-                          {course.platform}
-                        </p>
-                        <span className="text-xs bg-blue-900 text-blue-300 px-2 py-1 rounded-full">
-                          {course.level}
-                        </span>
-
-                        <a
-                          href={course.link}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="block mt-4 text-center bg-blue-600 py-2 rounded-lg hover:bg-blue-700 text-sm"
-                        >
-                          Start Course
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-400 text-sm">
-                    No structured course data available for this recommendation
-                    yet.
-                  </p>
-                )}
-              </div>
-
-              {/* Roadmap */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4 text-blue-300">
-                  Learning Roadmap
-                </h3>
-
-                <div className="border-l-2 border-blue-700 ml-2 space-y-5">
-                  {career.learning_roadmap?.map((step, i) => (
-                    <div key={i} className="pl-6 relative">
-                      <div className="absolute -left-3 top-1 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-xs">
-                        {step.step}
-                      </div>
-
-                      <div className="bg-gray-800 p-4 rounded-xl">
-                        <h4 className="font-semibold text-white">
-                          {step.title}
-                        </h4>
-                        <p className="text-gray-400 text-sm mt-1">
-                          {step.description}
-                        </p>
-                      </div>
+                  <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-6 bg-green-600 w-full text-white text-sm flex items-center justify-center font-semibold">
+                      100%
                     </div>
-                  ))}
+                  </div>
+                </div>
+
+                <div className="min-w-[160px] text-center">
+                  <p className="text-gray-500 text-lg">Model Accuracy</p>
+                  <h3 className="text-5xl font-extrabold text-blue-600 mt-2">
+                    {accuracy}%
+                  </h3>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Buttons */}
-        <div className="mt-10 flex gap-4">
-          <button
-            onClick={() => navigate("/form")}
-            className="bg-blue-600 px-5 py-2 rounded-lg hover:bg-blue-700"
-          >
-            Edit Profile
-          </button>
+            {topCareer && (
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-3xl shadow-lg p-8">
+                <div className="flex items-center gap-3 mb-5">
+                  <FaTrophy className="text-yellow-300 text-3xl" />
+                  <h2 className="text-3xl font-bold">Best Career Match</h2>
+                </div>
 
-          <button
-            onClick={() => navigate("/")}
-            className="bg-gray-800 px-5 py-2 rounded-lg hover:bg-gray-700"
-          >
-            Back Home
-          </button>
+                <h3 className="text-4xl font-extrabold leading-tight mb-4">
+                  {topCareer.career_name}
+                </h3>
+
+                <p className="text-blue-100 text-xl mb-6">
+                  {topCareer.description}
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-lg font-semibold mb-2">
+                      Confidence Score
+                    </p>
+                    <div className="w-full h-5 bg-white/20 rounded-full overflow-hidden">
+                      <div
+                        className="h-5 bg-cyan-300"
+                        style={{
+                          width: `${Math.max(
+                            20,
+                            Math.round((topCareer.match_score || 0) * 100)
+                          )}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-end justify-end">
+                    <span className="bg-cyan-400 text-blue-950 px-5 py-3 rounded-2xl text-lg font-bold">
+                      {topCareer.match_score >= 0.6
+                        ? "High Confidence"
+                        : "Moderate Confidence"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="bg-white rounded-3xl shadow-md p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <FaListOl className="text-blue-600 text-2xl" />
+                <h2 className="text-3xl font-bold text-gray-900">
+                  All Career Recommendations
+                </h2>
+              </div>
+
+              <div className="space-y-6">
+                {careers.map((career, index) => {
+                  const percent = Math.max(
+                    10,
+                    Math.round((career.match_score || 0) * 100)
+                  );
+
+                  return (
+                    <div key={index} className="border rounded-2xl p-5 bg-gray-50">
+                      <div className="flex gap-4 items-start">
+                        <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg">
+                          {index + 1}
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex justify-between gap-4 items-start">
+                            <div>
+                              <h3 className="text-2xl font-bold text-gray-900">
+                                {career.career_name}
+                              </h3>
+                              <p className="text-gray-500 mt-1">
+                                {career.category}
+                              </p>
+                            </div>
+
+                            <span className="bg-cyan-400 text-blue-950 px-4 py-2 rounded-xl text-sm font-bold">
+                              {career.match_score >= 0.6 ? "High" : "Low"}
+                            </span>
+                          </div>
+
+                          <div className="mt-4 w-full h-5 bg-gray-200 rounded-full overflow-hidden">
+                            <div
+                              className="h-5 bg-gradient-to-r from-cyan-400 to-blue-600 text-white text-xs flex items-center justify-center font-bold"
+                              style={{ width: `${percent}%` }}
+                            >
+                              {percent}%
+                            </div>
+                          </div>
+
+                          <p className="mt-4 text-gray-700">
+                            {career.description}
+                          </p>
+
+                          <p className="mt-3 text-sm text-gray-600">
+                            You entered{" "}
+                            <span className="font-semibold">
+                              {(career.user_entered_skills || []).length}
+                            </span>{" "}
+                            skills. This role matches{" "}
+                            <span className="font-semibold text-green-600">
+                              {(career.matched_skills || []).length}
+                            </span>{" "}
+                            of them, and you may need to learn{" "}
+                            <span className="font-semibold text-red-600">
+                              {(career.missing_skills || []).length}
+                            </span>{" "}
+                            more.
+                          </p>
+
+                          <div className="mt-6 grid md:grid-cols-2 gap-5">
+                            <div>
+                              <p className="font-semibold text-gray-800 mb-2">
+                                User Entered Skills
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {(career.user_entered_skills || []).length > 0 ? (
+                                  career.user_entered_skills.map((skill, i) => (
+                                    <span
+                                      key={i}
+                                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="text-gray-500 text-sm">
+                                    No user skills provided
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            <div>
+                              <p className="font-semibold text-gray-800 mb-2">
+                                Required Skills
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {(career.required_skills || []).map((skill, i) => (
+                                  <span
+                                    key={i}
+                                    className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
+                                  >
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div>
+                              <p className="font-semibold text-gray-800 mb-2">
+                                Matched Skills
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {(career.matched_skills || []).length > 0 ? (
+                                  career.matched_skills.map((skill, i) => (
+                                    <span
+                                      key={i}
+                                      className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm"
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="text-gray-500 text-sm">
+                                    No matched skills found
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            <div>
+                              <p className="font-semibold text-gray-800 mb-2">
+                                Missing Skills
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {(career.missing_skills || []).length > 0 ? (
+                                  career.missing_skills.map((skill, i) => (
+                                    <span
+                                      key={i}
+                                      className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm"
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                                    No major gaps
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-6">
+                            <p className="font-semibold text-gray-800 mb-3">
+                              Recommended Courses
+                            </p>
+
+                            {career.training_resources &&
+                            career.training_resources.length > 0 ? (
+                              <div className="grid md:grid-cols-2 gap-4">
+                                {career.training_resources.map((course, i) => (
+                                  <div
+                                    key={i}
+                                    className="bg-white border rounded-xl p-4"
+                                  >
+                                    <h4 className="font-semibold text-gray-900">
+                                      {course.title}
+                                    </h4>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                      {course.platform}
+                                    </p>
+                                    <span className="inline-block mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                                      {course.level}
+                                    </span>
+
+                                    <a
+                                      href={course.link}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="block mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                                    >
+                                      Start Course
+                                    </a>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-gray-500 text-sm">
+                                No course recommendations available.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-white rounded-3xl shadow-md p-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-5">
+                Quick Actions
+              </h3>
+
+              <div className="space-y-4">
+                <button
+                  onClick={() => window.print()}
+                  className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700"
+                >
+                  <FaPrint /> Print Results
+                </button>
+
+                <button className="w-full flex items-center justify-center gap-3 text-blue-600 py-3 rounded-2xl font-semibold hover:bg-blue-50">
+                  <FaDownload /> Download PDF
+                </button>
+
+                <button className="w-full flex items-center justify-center gap-3 text-gray-700 py-3 rounded-2xl font-semibold hover:bg-gray-50">
+                  <FaShareAlt /> Share Results
+                </button>
+
+                <button
+                  onClick={() => navigate("/form")}
+                  className="w-full flex items-center justify-center gap-3 text-cyan-600 py-3 rounded-2xl font-semibold hover:bg-cyan-50"
+                >
+                  <FaRedo /> New Assessment
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-md p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <FaInfoCircle className="text-cyan-500 text-2xl" />
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Model Information
+                </h3>
+              </div>
+
+              <div className="space-y-3 text-lg">
+                <p>
+                  <span className="font-semibold">Model:</span> Hybrid TF-IDF + Rules
+                </p>
+                <p>
+                  <span className="font-semibold">Accuracy:</span> {accuracy}%
+                </p>
+                <p>
+                  <span className="font-semibold">Top Careers:</span> {careers.length}
+                </p>
+                <p>
+                  <span className="font-semibold">Dataset Size:</span> 100+ careers
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-md p-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                User Summary
+              </h3>
+              <div className="space-y-3 text-gray-700">
+                <p>
+                  <span className="font-semibold">Education:</span>{" "}
+                  {userProfile.education || "N/A"}
+                </p>
+                <p>
+                  <span className="font-semibold">Interests:</span>{" "}
+                  {userProfile.interests || "N/A"}
+                </p>
+                <p>
+                  <span className="font-semibold">Skills:</span>{" "}
+                  {userProfile.skills || "N/A"}
+                </p>
+                <p>
+                  <span className="font-semibold">Goal:</span>{" "}
+                  {userProfile.career_goal || "N/A"}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,15 +1,29 @@
 function About() {
   return (
-    <div className="max-w-5xl mx-auto text-center">
-      <h2 className="text-4xl font-bold text-blue-600 mb-6">About SkillSakhi</h2>
-      <p className="text-lg text-gray-700 leading-8 mb-4">
-        SkillSakhi is a career guidance platform designed to help students and learners
-        discover the right career path based on their education, interests, skills, and goals.
-      </p>
-      <p className="text-lg text-gray-700 leading-8">
-        Our mission is to provide personalized recommendations, skill gap analysis,
-        and upskilling guidance so users can confidently build their future careers.
-      </p>
+    <div className="min-h-screen bg-[#eef4ff]">
+      <div className="max-w-5xl mx-auto px-6 py-16">
+        <div className="bg-white rounded-3xl shadow-md p-10">
+          <h1 className="text-5xl font-extrabold text-blue-900 mb-6">
+            About AI Career Guidance
+          </h1>
+
+          <p className="text-xl text-gray-700 leading-9 mb-6">
+            AI Career Guidance is an intelligent recommendation platform that analyzes
+            user interests, skills, education, experience, and goals to suggest suitable
+            career paths, learning resources, and skill development opportunities.
+          </p>
+
+          <p className="text-xl text-gray-700 leading-9 mb-6">
+            The system uses a hybrid approach combining rule-based filtering and TF-IDF
+            text similarity to generate personalized career recommendations.
+          </p>
+
+          <p className="text-xl text-gray-700 leading-9">
+            It is designed for students, job seekers, career switchers, and users looking
+            for flexible or home-based work options.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
