@@ -26,10 +26,11 @@ function Form() {
   };
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     setLoading(true);
     setError("");
-
+    
     try {
       const res = await fetch("https://skillrec.onrender.com/recommend", {
         method: "POST",
@@ -44,6 +45,7 @@ function Form() {
       }
 
       const data = await res.json();
+      console.log("Backend response:", data);
       localStorage.setItem("skillsakhi_results", JSON.stringify(data));
       navigate("/results", { state: data });
     } catch (err) {

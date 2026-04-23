@@ -1,21 +1,61 @@
 career_name,category,min_education,interests,required_skills,description,training_resource,opportunity_type,work_mode
-Data Analyst,Formal Job,Graduate,"analytics,data,computers","python,sql,excel,power bi,statistics,data visualization","Analyze data, create dashboards, and support decision-making in companies.","Excel Basics|YouTube / Coursera|Beginner;SQL for Beginners|YouTube / Udemy|Beginner;Power BI Dashboard Course|YouTube / Coursera|Intermediate","job","office"
-Web Developer,Formal Job,12th,"coding,technology,web design","html,css,javascript,react,git,responsive design","Build websites and web applications for businesses and organizations.","HTML CSS Bootcamp|freeCodeCamp|Beginner;JavaScript Essentials|YouTube / Udemy|Beginner;React Basics|YouTube / Scrimba|Intermediate","job/freelance","office/flexible"
-Backend Developer,Formal Job,Graduate,"coding,technology,logic","python,flask,django,api,sql,git,database","Develop server-side logic, APIs, and database-connected applications.","Python Programming|YouTube / Coursera|Beginner;Flask Backend Course|YouTube|Intermediate;SQL Basics|YouTube / Udemy|Beginner","job","office"
-Teacher,Formal Job,Graduate,"teaching,communication,children","subject knowledge,communication,lesson planning,patience,presentation","Teach students in schools, institutes, or coaching centers.","Teaching Skills Basics|YouTube|Beginner;Communication Skills|Coursera / YouTube|Beginner;Lesson Planning Practice|Self Practice|Intermediate","job","office"
-Tuition Teacher,Flexible Work,12th,"teaching,children,communication","subject knowledge,communication,lesson planning,patience","Teach students from home, online, or in small local batches.","Communication Basics|YouTube|Beginner;Teaching Methods|YouTube|Beginner;Create Notes and Lesson Plans|Self Practice|Intermediate","self-employment","home/flexible"
-Data Entry Operator,Entry-Level Job,12th,"typing,computers,office work","typing,excel,data entry,computer basics,accuracy","Handle records, spreadsheets, and routine office data work.","Typing Practice|Ratatype / TypingClub|Beginner;Excel Basics|YouTube|Beginner;Computer Fundamentals|Local Institute / YouTube|Beginner","job","office"
-Customer Support Executive,Formal Job,12th,"communication,helping people,computers","communication,problem solving,computer basics,english,customer handling","Assist customers through calls, chat, or email support.","Spoken English|YouTube / Local Institute|Beginner;Customer Communication|YouTube|Beginner;Computer Basics|YouTube|Beginner","job","office/flexible"
-Digital Marketing Assistant,Formal Job,12th,"social media,content,business","social media,content writing,seo,communication,canva","Support online marketing, content creation, and digital campaigns.","Digital Marketing Basics|Google Digital Garage|Beginner;Canva Design|YouTube|Beginner;SEO Basics|YouTube / Coursera|Intermediate","job/freelance","flexible"
-Graphic Designer,Creative Career,12th,"design,creativity,art","canva,figma,design principles,creativity,branding","Create posters, social media content, and visual assets.","Canva Beginner Course|Canva / YouTube|Beginner;Design Principles|YouTube|Beginner;Figma Basics|YouTube|Intermediate","job/freelance","flexible"
-UI UX Designer,Creative Career,Graduate,"design,technology,user experience","figma,wireframing,prototyping,user research,design thinking","Design user-friendly digital interfaces and experiences.","UX Fundamentals|Google UX / Coursera|Beginner;Figma Practice|YouTube|Beginner;Wireframing and Prototyping|YouTube|Intermediate","job/freelance","office/flexible"
-Tailor,Skill-Based Livelihood,8th,"fashion,stitching,design","basic stitching,measurement,fabric cutting,machine handling,customer service","Provide tailoring and alteration services from home or a local shop.","Basic Stitching Course|Local Training Centre|Beginner;Measurement and Cutting|YouTube|Beginner;Blouse and Dress Design|YouTube / Workshop|Intermediate","self-employment","home/shop"
-Home Baker,Small Business,10th,"cooking,baking,business","baking,cake decoration,food safety,pricing,customer service","Start a home bakery and sell cakes, snacks, or baked goods.","Baking Basics|YouTube|Beginner;Cake Decoration|YouTube / Workshop|Intermediate;Food Safety and Pricing|YouTube / Self Learning|Beginner","self-employment","home"
-Beautician,Skill-Based Livelihood,10th,"beauty,fashion,service","makeup,skincare,hair styling,customer handling,hygiene","Work in salons or provide beauty services independently.","Basic Makeup Course|Beauty Academy / YouTube|Beginner;Hair Styling Basics|YouTube|Beginner;Salon Hygiene and Customer Handling|Workshop|Intermediate","job/self-employment","shop/flexible"
-Handicraft Seller,Small Business,8th,"crafts,art,handmade products","craft making,product design,packaging,selling,pricing","Create and sell handmade products online or locally.","Craft Design Basics|YouTube|Beginner;Packaging and Selling|YouTube|Beginner;Online Selling Basics|Instagram / WhatsApp Guides|Intermediate","self-employment","home/flexible"
-Mehendi Artist,Skill-Based Livelihood,8th,"art,beauty,events","mehendi design,creativity,customer handling,time management","Offer mehendi services for weddings, festivals, and events.","Mehendi Basics|YouTube|Beginner;Advanced Bridal Design|YouTube|Intermediate;Client Handling Practice|Self Practice|Beginner","self-employment","flexible"
-Home Cook / Tiffin Service,Small Business,8th,"cooking,food,service","cooking,food hygiene,menu planning,packaging,customer service","Run a home-based food or tiffin business.","Basic Cooking for Business|YouTube|Beginner;Food Hygiene|YouTube / Local Workshop|Beginner;Menu Planning and Pricing|Self Learning|Intermediate","self-employment","home"
-Reseller / Online Seller,Small Business,10th,"business,sales,social media","selling,communication,pricing,social media,product sourcing","Sell products through WhatsApp, Instagram, or local networks.","Social Selling Basics|YouTube|Beginner;Pricing and Product Sourcing|YouTube|Beginner;Instagram Business Basics|YouTube / Meta Guides|Intermediate","self-employment","home/flexible"
-Office Assistant,Entry-Level Job,12th,"organization,office work,computers","computer basics,documentation,communication,excel,time management","Support administrative tasks and office coordination.","MS Office Basics|YouTube|Beginner;Documentation Skills|Self Practice|Beginner;Communication Skills|YouTube|Beginner","job","office"
-Freelance Content Writer,Flexible Work,Graduate,"writing,creativity,research","writing,grammar,research,seo,editing","Write blog posts, articles, and website content for clients.","Content Writing Basics|YouTube|Beginner;Grammar and Editing|YouTube|Beginner;SEO Writing|YouTube / Coursera|Intermediate","freelance","home/flexible"
-Entrepreneur / Small Business Starter,Business Path,10th,"business,leadership,sales","planning,pricing,communication,basic accounting,customer service","Start and manage a small venture based on your interest or skill.","Business Basics|YouTube|Beginner;Pricing and Budgeting|YouTube|Beginner;Customer Service and Promotion|Self Learning|Intermediate","self-employment","flexible"
+
+Data Analyst,Formal Job,Graduate,"analytics,data,computers","python,sql,excel,power bi,statistics,data visualization","Analyze data and build dashboards for business insights.","Google Data Analytics|Coursera|Beginner|https://www.coursera.org/professional-certificates/google-data-analytics","job","office"
+
+Web Developer,Formal Job,12th,"coding,technology","html,css,javascript,react,git","Build websites and web apps.","freeCodeCamp Web Dev|freeCodeCamp|Beginner|https://www.freecodecamp.org/learn","job/freelance","flexible"
+
+Backend Developer,Formal Job,Graduate,"coding,logic","python,flask,django,api,sql","Develop server-side logic and APIs.","Python Backend|YouTube|Beginner|https://www.youtube.com/results?search_query=python+backend","job","office"
+
+App Developer,Formal Job,Graduate,"coding,mobile apps","flutter,android,java,kotlin,ui design","Build mobile applications.","Flutter Course|YouTube|Beginner|https://www.youtube.com/results?search_query=flutter+course","job/freelance","flexible"
+
+Digital Marketing Assistant,Formal Job,12th,"social media,marketing","seo,content writing,canva,social media","Manage online marketing campaigns.","Google Digital Marketing|Google|Beginner|https://skillshop.exceedlms.com","job/freelance","flexible"
+
+Graphic Designer,Creative Career,12th,"design,creativity","canva,figma,design principles","Create visual content.","Canva Design School|Canva|Beginner|https://www.canva.com/design-school/","freelance","flexible"
+
+UI UX Designer,Creative Career,Graduate,"design,technology","figma,wireframing,prototyping","Design user-friendly apps.","Google UX|Coursera|Beginner|https://www.coursera.org","job","flexible"
+
+Content Writer,Flexible Work,12th,"writing,creativity","writing,grammar,seo","Write blogs and articles.","Content Writing|YouTube|Beginner|https://www.youtube.com/results?search_query=content+writing","freelance","home"
+
+Freelance Blogger,Flexible Work,12th,"writing,blogging","writing,seo,content strategy","Write blogs and earn online.","Blogging Guide|YouTube|Beginner|https://www.youtube.com/results?search_query=blogging","freelance","home"
+
+Data Entry Operator,Entry-Level Job,12th,"typing,computers","typing,excel,data entry","Handle office data work.","Typing Practice|TypingClub|Beginner|https://www.typingclub.com","job","office"
+
+Customer Support Executive,Formal Job,12th,"communication,helping","communication,problem solving","Assist customers.","Customer Support|YouTube|Beginner|https://www.youtube.com/results?search_query=customer+support","job","flexible"
+
+Office Assistant,Entry-Level Job,12th,"office work","ms office,communication","Support office tasks.","MS Office|YouTube|Beginner|https://www.youtube.com/results?search_query=ms+office","job","office"
+
+Teacher,Formal Job,Graduate,"teaching,children","communication,subject knowledge","Teach students.","Teaching Skills|YouTube|Beginner|https://www.youtube.com/results?search_query=teaching+skills","job","office"
+
+Tuition Teacher,Flexible Work,12th,"teaching","communication,subject knowledge","Teach students from home.","Teaching Tips|YouTube|Beginner|https://www.youtube.com/results?search_query=teaching+tutorial","self-employment","home"
+
+Home Baker,Small Business,10th,"cooking,baking","baking,food safety,pricing","Start baking business.","Baking Basics|YouTube|Beginner|https://www.youtube.com/results?search_query=baking","self-employment","home"
+
+Tailor,Skill-Based Livelihood,8th,"stitching,fashion","stitching,cutting,measurement","Provide tailoring services.","Tailoring|YouTube|Beginner|https://www.youtube.com/results?search_query=tailoring","self-employment","home"
+
+Beautician,Skill-Based Livelihood,10th,"beauty","makeup,hair styling","Provide beauty services.","Makeup Course|YouTube|Beginner|https://www.youtube.com/results?search_query=makeup","self-employment","flexible"
+
+Mehendi Artist,Skill-Based Livelihood,8th,"art,design","mehendi design","Apply mehendi designs.","Mehendi|YouTube|Beginner|https://www.youtube.com/results?search_query=mehendi","self-employment","flexible"
+
+Handicraft Seller,Small Business,8th,"crafts","craft making,selling","Sell handmade products.","Handicraft|YouTube|Beginner|https://www.youtube.com/results?search_query=handicraft","self-employment","home"
+
+Reseller,Small Business,10th,"business,sales","selling,communication","Sell products online.","Reselling|YouTube|Beginner|https://www.youtube.com/results?search_query=reselling","self-employment","home"
+
+Tiffin Service Owner,Small Business,8th,"cooking","cooking,packaging","Start food service.","Food Business|YouTube|Beginner|https://www.youtube.com/results?search_query=tiffin+service","self-employment","home"
+
+Entrepreneur,Business Path,10th,"business","planning,marketing","Start own business.","Startup Basics|YouTube|Beginner|https://www.youtube.com/results?search_query=startup","self-employment","flexible"
+
+Social Media Manager,Formal Job,12th,"social media","content,analytics,seo","Manage social accounts.","Social Media|YouTube|Beginner|https://www.youtube.com/results?search_query=social+media","job","flexible"
+
+Photographer,Creative Career,12th,"photography","camera,editing","Take professional photos.","Photography|YouTube|Beginner|https://www.youtube.com/results?search_query=photography","freelance","flexible"
+
+Video Editor,Creative Career,12th,"editing","premiere pro,editing","Edit videos.","Video Editing|YouTube|Beginner|https://www.youtube.com/results?search_query=video+editing","freelance","flexible"
+
+Fitness Trainer,Flexible Work,12th,"fitness","training,nutrition","Train clients.","Fitness Training|YouTube|Beginner|https://www.youtube.com/results?search_query=fitness+trainer","self-employment","flexible"
+
+Yoga Instructor,Flexible Work,12th,"fitness,yoga","yoga,teaching","Teach yoga.","Yoga Training|YouTube|Beginner|https://www.youtube.com/results?search_query=yoga","self-employment","flexible"
+
+Event Planner,Creative Career,12th,"events,management","planning,communication","Plan events.","Event Planning|YouTube|Beginner|https://www.youtube.com/results?search_query=event+planning","freelance","flexible"
+
+Makeup Artist,Creative Career,10th,"beauty","makeup,creativity","Professional makeup.","Makeup Artist|YouTube|Beginner|https://www.youtube.com/results?search_query=makeup+artist","self-employment","flexible"
+
+Sales Executive,Formal Job,12th,"sales,communication","selling,communication","Sell products/services.","Sales Training|YouTube|Beginner|https://www.youtube.com/results?search_query=sales","job","office"

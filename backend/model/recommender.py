@@ -19,23 +19,27 @@ def parse_training_resources(resource_text):
 
     for item in items:
         parts = [p.strip() for p in item.split("|")]
-        if len(parts) == 3:
+
+        if len(parts) == 4:
             resources.append({
                 "title": parts[0],
                 "platform": parts[1],
-                "level": parts[2]
+                "level": parts[2],
+                "link": parts[3]
             })
-        elif len(parts) == 2:
+        elif len(parts) == 3:
             resources.append({
                 "title": parts[0],
                 "platform": parts[1],
-                "level": "General"
+                "level": parts[2],
+                "link": "#"
             })
         else:
             resources.append({
                 "title": item.strip(),
                 "platform": "General",
-                "level": "General"
+                "level": "General",
+                "link": "#"
             })
 
     return resources
@@ -207,5 +211,7 @@ class HybridCareerRecommender:
                 ),
                 "opportunity_type": row["opportunity_type"],
                 "work_mode": row["work_mode"]
-             })
+    })
+
+# ✅ RETURN OUTSIDE LOOP
         return results
