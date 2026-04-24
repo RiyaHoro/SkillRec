@@ -226,7 +226,8 @@ class HybridCareerRecommender:
 
         for idx in top_indices:
             row = filtered_df.iloc[idx]
-
+            
+        
             required_skills = [
                 s.strip() for s in str(row["required_skills"]).split(",") if s.strip()
             ]
@@ -240,32 +241,46 @@ class HybridCareerRecommender:
                 skill for skill in required_skills
                 if skill.lower() not in user_skills
             ]
+            explanation = f"This career is recommended because your interests in {user_data.get('interests')} and skills like {', '.join(matched_skills[:2]) if matched_skills else 'your background'} match this role."
+            readiness = len(matched_skills) / len(required_skills) if required_skills else 0
+            tags = []
 
+            work_mode = str(row["work_mode"]).lower()
+            opportunity = str(row["opportunity_type"]).lower()
+
+            if "home" in work_mode:
+                tags.append("🏠 Work From Home")
+
+            if "self" in opportunity or "business" in opportunity:
+                tags.append("💡 Low Investment Business")
+
+            if user_data.get("education", "").lower() in ["8th", "10th", "12th"]:
+                tags.append("👩‍💼 Career Restart Friendly")
             results.append({
-                "career_name": row["career_name"],
-                "category": row["category"],
-                "match_score": round(float(scores[idx]), 2),
-                "description": row["description"],
+            "career_name": row["career_name"],
+            "category": row["category"],
+            "match_score": round(float(scores[idx]), 2),
+            "description": row["description"],
 
-                # ⭐ IMPORTANT FIX
-                "user_entered_skills": user_skills_list,
+            "user_entered_skills": user_skills_list,
+            "required_skills": required_skills,
+            "matched_skills": matched_skills,
+            "missing_skills": missing_skills,
 
-                "required_skills": required_skills,
-                "matched_skills": matched_skills,
-                "missing_skills": missing_skills,
+            "training_resources": parse_training_resources(row["training_resource"]),
+            "learning_roadmap": build_learning_roadmap(
+                row["career_name"],
+                missing_skills,
+                matched_skills
+            ),
 
-                "training_resources": parse_training_resources(
-                    row["training_resource"]
-                ),
+            # NEW FEATURES
+            "explanation": explanation,
+            "readiness_score": round(readiness * 100),
+            "tags": tags,
 
-                "learning_roadmap": build_learning_roadmap(
-                    row["career_name"],
-                    missing_skills,
-                    matched_skills
-                ),
-
-                "opportunity_type": row["opportunity_type"],
-                "work_mode": row["work_mode"]
-            })
+            "opportunity_type": row["opportunity_type"],
+            "work_mode": row["work_mode"]
+        })
 
         return results

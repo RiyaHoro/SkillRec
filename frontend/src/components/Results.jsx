@@ -8,6 +8,7 @@ import {
   FaTrophy,
   FaListOl,
   FaInfoCircle,
+  FaHeart,
 } from "react-icons/fa";
 
 function Results() {
@@ -23,6 +24,21 @@ function Results() {
     : [];
 
   const topCareer = careers[0];
+
+  const saveCareer = (career) => {
+    const saved = JSON.parse(localStorage.getItem("saved_careers")) || [];
+
+    const exists = saved.some(
+      (item) => item.career_name === career.career_name
+    );
+
+    if (!exists) {
+      localStorage.setItem("saved_careers", JSON.stringify([...saved, career]));
+      alert("Career saved!");
+    } else {
+      alert("Already saved!");
+    }
+  };
 
   if (careers.length === 0) {
     return (
@@ -106,9 +122,26 @@ function Results() {
                   {topCareer.career_name}
                 </h3>
 
-                <p className="text-blue-100 text-xl mb-6">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {(topCareer.tags || []).map((tag, i) => (
+                    <span
+                      key={i}
+                      className="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="text-blue-100 text-xl mb-4">
                   {topCareer.description}
                 </p>
+
+                {topCareer.explanation && (
+                  <p className="bg-white/15 text-white p-4 rounded-2xl mb-6">
+                    💡 {topCareer.explanation}
+                  </p>
+                )}
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -128,12 +161,21 @@ function Results() {
                     </div>
                   </div>
 
-                  <div className="flex items-end justify-end">
-                    <span className="bg-cyan-400 text-blue-950 px-5 py-3 rounded-2xl text-lg font-bold">
-                      {topCareer.match_score >= 0.6
-                        ? "High Confidence"
-                        : "Moderate Confidence"}
-                    </span>
+                  <div>
+                    <p className="text-lg font-semibold mb-2">
+                      Readiness Score
+                    </p>
+                    <div className="w-full h-5 bg-white/20 rounded-full overflow-hidden">
+                      <div
+                        className="h-5 bg-green-300"
+                        style={{
+                          width: `${topCareer.readiness_score || 0}%`,
+                        }}
+                      />
+                    </div>
+                    <p className="text-sm mt-1">
+                      {topCareer.readiness_score || 0}% ready
+                    </p>
                   </div>
                 </div>
               </div>
@@ -154,8 +196,13 @@ function Results() {
                     Math.round((career.match_score || 0) * 100)
                   );
 
+                  const readiness = career.readiness_score || 0;
+
                   return (
-                    <div key={index} className="border rounded-2xl p-5 bg-gray-50">
+                    <div
+                      key={index}
+                      className="border rounded-2xl p-5 bg-gray-50"
+                    >
                       <div className="flex gap-4 items-start">
                         <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg">
                           {index + 1}
@@ -170,11 +217,32 @@ function Results() {
                               <p className="text-gray-500 mt-1">
                                 {career.category}
                               </p>
+
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                {(career.tags || []).map((tag, i) => (
+                                  <span
+                                    key={i}
+                                    className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-medium"
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
 
-                            <span className="bg-cyan-400 text-blue-950 px-4 py-2 rounded-xl text-sm font-bold">
-                              {career.match_score >= 0.6 ? "High" : "Low"}
-                            </span>
+                            <div className="flex items-center gap-3">
+                              <span className="bg-cyan-400 text-blue-950 px-4 py-2 rounded-xl text-sm font-bold">
+                                {career.match_score >= 0.6 ? "High" : "Low"}
+                              </span>
+
+                              <button
+                                onClick={() => saveCareer(career)}
+                                className="bg-red-100 text-red-500 p-3 rounded-full hover:bg-red-200"
+                                title="Save Career"
+                              >
+                                <FaHeart />
+                              </button>
+                            </div>
                           </div>
 
                           <div className="mt-4 w-full h-5 bg-gray-200 rounded-full overflow-hidden">
@@ -182,13 +250,37 @@ function Results() {
                               className="h-5 bg-gradient-to-r from-cyan-400 to-blue-600 text-white text-xs flex items-center justify-center font-bold"
                               style={{ width: `${percent}%` }}
                             >
-                              {percent}%
+                              Match {percent}%
+                            </div>
+                          </div>
+
+                          <div className="mt-4">
+                            <p className="text-sm font-semibold mb-1">
+                              Readiness: {readiness}%
+                            </p>
+                            <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                              <div
+                                className={`h-3 rounded-full ${
+                                  readiness > 70
+                                    ? "bg-green-500"
+                                    : readiness > 40
+                                    ? "bg-yellow-500"
+                                    : "bg-red-500"
+                                }`}
+                                style={{ width: `${readiness}%` }}
+                              />
                             </div>
                           </div>
 
                           <p className="mt-4 text-gray-700">
                             {career.description}
                           </p>
+
+                          {career.explanation && (
+                            <p className="mt-3 text-sm text-blue-700 bg-blue-50 p-3 rounded-lg">
+                              💡 {career.explanation}
+                            </p>
+                          )}
 
                           <p className="mt-3 text-sm text-gray-600">
                             You entered{" "}
@@ -212,7 +304,8 @@ function Results() {
                                 User Entered Skills
                               </p>
                               <div className="flex flex-wrap gap-2">
-                                {(career.user_entered_skills || []).length > 0 ? (
+                                {(career.user_entered_skills || []).length >
+                                0 ? (
                                   career.user_entered_skills.map((skill, i) => (
                                     <span
                                       key={i}
@@ -234,14 +327,16 @@ function Results() {
                                 Required Skills
                               </p>
                               <div className="flex flex-wrap gap-2">
-                                {(career.required_skills || []).map((skill, i) => (
-                                  <span
-                                    key={i}
-                                    className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
-                                  >
-                                    {skill}
-                                  </span>
-                                ))}
+                                {(career.required_skills || []).map(
+                                  (skill, i) => (
+                                    <span
+                                      key={i}
+                                      className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
+                                    >
+                                      {skill}
+                                    </span>
+                                  )
+                                )}
                               </div>
                             </div>
 
@@ -330,6 +425,33 @@ function Results() {
                               </p>
                             )}
                           </div>
+
+                          <div className="mt-6">
+                            <p className="font-semibold text-gray-800 mb-3">
+                              Learning Roadmap
+                            </p>
+
+                            <div className="space-y-4 border-l-2 border-blue-500 pl-4">
+                              {(career.learning_roadmap || []).map(
+                                (step, i) => (
+                                  <div key={i} className="relative">
+                                    <div className="absolute -left-7 top-1 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs">
+                                      {step.step}
+                                    </div>
+
+                                    <div className="bg-white p-3 rounded-lg shadow-sm border">
+                                      <p className="font-semibold">
+                                        {step.title}
+                                      </p>
+                                      <p className="text-sm text-gray-600">
+                                        {step.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -380,16 +502,19 @@ function Results() {
 
               <div className="space-y-3 text-lg">
                 <p>
-                  <span className="font-semibold">Model:</span> Hybrid TF-IDF + Rules
+                  <span className="font-semibold">Model:</span> Hybrid TF-IDF +
+                  Rules
                 </p>
                 <p>
                   <span className="font-semibold">Accuracy:</span> {accuracy}%
                 </p>
                 <p>
-                  <span className="font-semibold">Top Careers:</span> {careers.length}
+                  <span className="font-semibold">Top Careers:</span>{" "}
+                  {careers.length}
                 </p>
                 <p>
-                  <span className="font-semibold">Dataset Size:</span> 100+ careers
+                  <span className="font-semibold">Dataset Size:</span> 100+
+                  careers
                 </p>
               </div>
             </div>
@@ -416,6 +541,18 @@ function Results() {
                   {userProfile.career_goal || "N/A"}
                 </p>
               </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-md p-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Women-Supportive Features
+              </h3>
+              <ul className="space-y-3 text-gray-700">
+                <li>🏠 Highlights home-based work</li>
+                <li>💡 Shows low-investment business options</li>
+                <li>👩‍💼 Supports career restart pathways</li>
+                <li>📚 Suggests beginner-friendly courses</li>
+              </ul>
             </div>
           </div>
         </div>
