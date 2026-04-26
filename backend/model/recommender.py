@@ -216,7 +216,18 @@ class HybridCareerRecommender:
         scores = cosine_similarity(user_vector, filtered_vectors).flatten()
 
         filtered_df = filtered_df.reset_index(drop=True)
-        top_indices = scores.argsort()[::-1][:top_n]
+        seen = set()
+        top_indices = []
+
+        for idx in scores.argsort()[::-1]:
+            career_name = filtered_df.iloc[idx]["career_name"]
+
+            if career_name not in seen:
+                seen.add(career_name)
+                top_indices.append(idx)
+
+            if len(top_indices) == top_n:
+                break
 
         # USER SKILLS
         user_skills = set(normalize_list_from_text(user_data.get("skills", "")))

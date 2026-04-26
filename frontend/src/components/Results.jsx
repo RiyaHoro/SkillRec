@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import jsPDF from 'jspdf'; 
 import {
   FaCheckCircle,
   FaPrint,
@@ -29,7 +30,7 @@ function Results() {
     const saved = JSON.parse(localStorage.getItem("saved_careers")) || [];
 
     const exists = saved.some(
-      (item) => item.career_name === career.career_name
+      (item) => item.career_name === career.career_name,
     );
 
     if (!exists) {
@@ -63,15 +64,72 @@ function Results() {
 
   const accuracy = Math.max(
     48,
-    Math.round((topCareer?.match_score || 0) * 100)
+    Math.round((topCareer?.match_score || 0) * 100),
   );
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("SkillSakhi Career Recommendation Report", 20, 20);
+
+    let y = 35;
+
+    doc.setFontSize(12);
+    doc.text(`Education: ${userProfile.education || "N/A"}`, 20, y);
+    y += 8;
+    doc.text(`Interests: ${userProfile.interests || "N/A"}`, 20, y);
+    y += 8;
+    doc.text(`Skills: ${userProfile.skills || "N/A"}`, 20, y);
+    y += 12;
+
+    careers.slice(0, 5).forEach((career, index) => {
+      if (y > 260) {
+        doc.addPage();
+        y = 20;
+      }
+
+      doc.setFontSize(14);
+      doc.text(`${index + 1}. ${career.career_name}`, 20, y);
+      y += 8;
+
+      doc.setFontSize(11);
+      doc.text(`Category: ${career.category || "N/A"}`, 20, y);
+      y += 7;
+
+      doc.text(
+        `Match Score: ${Math.round((career.match_score || 0) * 100)}%`,
+        20,
+        y,
+      );
+      y += 7;
+
+      doc.text(`Readiness: ${career.readiness_score || 0}%`, 20, y);
+      y += 7;
+
+      doc.text(
+        `Matched Skills: ${(career.matched_skills || []).join(", ") || "None"}`,
+        20,
+        y,
+      );
+      y += 7;
+
+      doc.text(
+        `Missing Skills: ${(career.missing_skills || []).join(", ") || "None"}`,
+        20,
+        y,
+      );
+      y += 10;
+    });
+
+    doc.save("SkillSakhi_Career_Report.pdf");
+  };
 
   return (
     <div className="min-h-screen bg-[#eef4ff]">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="text-center mb-10">
-          <FaCheckCircle className="text-green-600 text-7xl mx-auto mb-4" />
-          <h1 className="text-6xl font-extrabold text-blue-900">
+          <FaCheckCircle className="text-green-600 text-5xl mx-auto mb-4" />
+          <h1 className="text-5xl font-extrabold text-blue-900">
             Your Career Recommendations
           </h1>
           <p className="text-gray-600 text-2xl mt-4">
@@ -84,11 +142,14 @@ function Results() {
             <div className="bg-white rounded-3xl shadow-md p-6">
               <div className="flex justify-between items-start gap-6">
                 <div className="flex-1">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-3">
                     Profile Analysis
                   </h2>
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-xl font-semibold">
+                    <span
+                      className="text-xl
+                     font-semibold text-zinc-600"
+                    >
                       Profile Completeness:
                     </span>
                     <span className="bg-green-600 text-white px-4 py-1 rounded-full text-sm font-bold">
@@ -154,7 +215,7 @@ function Results() {
                         style={{
                           width: `${Math.max(
                             20,
-                            Math.round((topCareer.match_score || 0) * 100)
+                            Math.round((topCareer.match_score || 0) * 100),
                           )}%`,
                         }}
                       />
@@ -193,7 +254,7 @@ function Results() {
                 {careers.map((career, index) => {
                   const percent = Math.max(
                     10,
-                    Math.round((career.match_score || 0) * 100)
+                    Math.round((career.match_score || 0) * 100),
                   );
 
                   const readiness = career.readiness_score || 0;
@@ -264,8 +325,8 @@ function Results() {
                                   readiness > 70
                                     ? "bg-green-500"
                                     : readiness > 40
-                                    ? "bg-yellow-500"
-                                    : "bg-red-500"
+                                      ? "bg-yellow-500"
+                                      : "bg-red-500"
                                 }`}
                                 style={{ width: `${readiness}%` }}
                               />
@@ -335,7 +396,7 @@ function Results() {
                                     >
                                       {skill}
                                     </span>
-                                  )
+                                  ),
                                 )}
                               </div>
                             </div>
@@ -448,7 +509,7 @@ function Results() {
                                       </p>
                                     </div>
                                   </div>
-                                )
+                                ),
                               )}
                             </div>
                           </div>
@@ -475,10 +536,12 @@ function Results() {
                   <FaPrint /> Print Results
                 </button>
 
-                <button className="w-full flex items-center justify-center gap-3 text-blue-600 py-3 rounded-2xl font-semibold hover:bg-blue-50">
+                <button
+                  onClick={downloadPDF}
+                  className="w-full flex items-center justify-center gap-3 text-blue-600 py-3 rounded-2xl font-semibold hover:bg-blue-50"
+                >
                   <FaDownload /> Download PDF
                 </button>
-
                 <button className="w-full flex items-center justify-center gap-3 text-gray-700 py-3 rounded-2xl font-semibold hover:bg-gray-50">
                   <FaShareAlt /> Share Results
                 </button>
