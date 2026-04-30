@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import jsPDF from 'jspdf'; 
+import jsPDF from "jspdf";
 import {
   FaCheckCircle,
   FaPrint,
@@ -136,6 +136,12 @@ function Results() {
             Based on our AI analysis of your profile
           </p>
         </div>
+        <button
+          onClick={() => navigate("/assessment")}
+          className="bg-purple-600 text-white px-6 py-3 mb-2 rounded-xl font-semibold hover:bg-purple-700 mt-4"
+        >
+          Take Career Assessment Test
+        </button>
 
         <div className="grid lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2 space-y-8">
@@ -486,7 +492,47 @@ function Results() {
                               </p>
                             )}
                           </div>
+                          {/* JOB OPPORTUNITIES */}
+                          <div className="mt-6">
+                            <p className="font-semibold text-gray-800 mb-3">
+                              Job Opportunities
+                            </p>
 
+                            <div className="grid md:grid-cols-2 gap-3">
+                              <a
+                                href={
+                                  career.job_links?.linkedin ||
+                                  `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(
+                                    career.career_name,
+                                  )}`
+                                }
+                                target="_blank"
+                                rel="noreferrer"
+                                className="bg-[#0A66C2] text-white px-4 py-3 rounded-xl text-center font-semibold hover:opacity-90 transition"
+                              >
+                                Search on LinkedIn
+                              </a>
+
+                              <a
+                                href={
+                                  career.job_links?.naukri ||
+                                  `https://www.naukri.com/${career.career_name
+                                    .toLowerCase()
+                                    .replaceAll(" ", "-")}-jobs`
+                                }
+                                target="_blank"
+                                rel="noreferrer"
+                                className="bg-purple-600 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-purple-700 transition"
+                              >
+                                Search on Naukri
+                              </a>
+                            </div>
+
+                            <p className="text-xs text-gray-500 mt-2">
+                              Opens live job search results for this career
+                              role.
+                            </p>
+                          </div>
                           <div className="mt-6">
                             <p className="font-semibold text-gray-800 mb-3">
                               Learning Roadmap
@@ -599,10 +645,10 @@ function Results() {
                   <span className="font-semibold">Skills:</span>{" "}
                   {userProfile.skills || "N/A"}
                 </p>
-                <p>
-                  <span className="font-semibold">Goal:</span>{" "}
-                  {userProfile.career_goal || "N/A"}
-                </p>
+                {/* <p>
+                  <span className="font-semibold">Career Stage:</span>{" "}
+                  {userProfile.career_stage || "Not specified"}
+                </p> */}
               </div>
             </div>
 

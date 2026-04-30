@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Form from "./components/Form";
 import Results from "./components/Results";
+import Assessment from "./components/Assessment";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/form" element={<Form />} />
         <Route path="/results" element={<Results />} />
+        <Route path="/assessment" element={<Assessment />} />
       </Routes>
     </Router>
   );

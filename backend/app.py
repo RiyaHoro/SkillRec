@@ -20,22 +20,14 @@ def recommend():
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "No input data provided"}), 400
+        return jsonify({"error": "No input data"}), 400
 
-    recommendations = recommender.recommend(data, top_n=5)
+    result = recommender.recommend(data, top_n=5)
 
     return jsonify({
-        "user_profile": {
-            "age": data.get("age", ""),
-            "education": data.get("education", ""),
-            "interests": data.get("interests", ""),
-            "skills": data.get("skills", ""),
-            "career_goal": data.get("career_goal", ""),
-            "preferred_work_type": data.get("preferred_work_type", ""),
-            "preferred_work_mode": data.get("preferred_work_mode", "")
-        },
-        "recommended_careers": recommendations
+        "user_profile": data,
+        "predicted_category": result["predicted_category"],
+        "recommended_careers": result["recommended_careers"]
     })
-
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

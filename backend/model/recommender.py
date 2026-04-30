@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from model.preprocess import clean_text, normalize_list_from_text
+from model.career_classifier import CareerCategoryClassifier
 
 # Education hierarchy
 EDUCATION_ORDER = {
@@ -118,6 +119,7 @@ class HybridCareerRecommender:
 
     def __init__(self, csv_path="data/careers.csv"):
         self.df = pd.read_csv(csv_path).fillna("")
+       
 
         # Combine text for ML
         self.df["combined_text"] = self.df.apply(
@@ -136,6 +138,7 @@ class HybridCareerRecommender:
 
         self.vectorizer = TfidfVectorizer(stop_words="english")
         self.career_vectors = self.vectorizer.fit_transform(self.df["combined_text"])
+        self.category_classifier = CareerCategoryClassifier(csv_path)
 
 
     # -----------------------------
@@ -182,116 +185,152 @@ class HybridCareerRecommender:
     # MAIN RECOMMEND FUNCTION
     # -----------------------------
     def recommend(self, user_data, top_n=5):
-
-        filtered_df = self.filter_by_rules(user_data).copy()
-
-        # recompute text
-        filtered_df["combined_text"] = filtered_df.apply(
-            lambda row: clean_text(
-                f"{row['career_name']} "
-                f"{row['category']} "
-                f"{row['interests']} "
-                f"{row['required_skills']} "
-                f"{row['description']} "
-                f"{row['training_resource']} "
-                f"{row['opportunity_type']} "
-                f"{row['work_mode']}"
-            ),
-            axis=1
-        )
-
-        filtered_vectors = self.vectorizer.transform(filtered_df["combined_text"])
-
-        # USER TEXT
-        user_text = clean_text(
-            f"{user_data.get('education', '')} "
-            f"{user_data.get('interests', '')} "
-            f"{user_data.get('skills', '')} "
-            f"{user_data.get('career_goal', '')} "
-            f"{user_data.get('preferred_work_type', '')} "
-            f"{user_data.get('preferred_work_mode', '')}"
-        )
-
-        user_vector = self.vectorizer.transform([user_text])
-        scores = cosine_similarity(user_vector, filtered_vectors).flatten()
-
-        filtered_df = filtered_df.reset_index(drop=True)
-        seen = set()
-        top_indices = []
-
-        for idx in scores.argsort()[::-1]:
-            career_name = filtered_df.iloc[idx]["career_name"]
-
-            if career_name not in seen:
-                seen.add(career_name)
-                top_indices.append(idx)
-
-            if len(top_indices) == top_n:
-                break
-
-        # USER SKILLS
-        user_skills = set(normalize_list_from_text(user_data.get("skills", "")))
-        user_skills_list = list(user_skills)
-
-        results = []
-
-        for idx in top_indices:
-            row = filtered_df.iloc[idx]
-            
+            # 1. Rule-based filtering
         
-            required_skills = [
-                s.strip() for s in str(row["required_skills"]).split(",") if s.strip()
+            filtered_df = self.filter_by_rules(user_data).copy()
+            # 2. Decision Tree category prediction
+            predicted_category = self.category_classifier.predict_category(user_data)
+
+            category_filtered_df = filtered_df[
+                filtered_df["category"].str.lower() == predicted_category.lower()
             ]
 
-            matched_skills = [
-                skill for skill in required_skills
-                if skill.lower() in user_skills
-            ]
+            if not category_filtered_df.empty:
+                filtered_df = category_filtered_df.copy()
 
-            missing_skills = [
-                skill for skill in required_skills
-                if skill.lower() not in user_skills
-            ]
-            explanation = f"This career is recommended because your interests in {user_data.get('interests')} and skills like {', '.join(matched_skills[:2]) if matched_skills else 'your background'} match this role."
-            readiness = len(matched_skills) / len(required_skills) if required_skills else 0
-            tags = []
+            # 3. Recompute text for filtered careers
+            filtered_df["combined_text"] = filtered_df.apply(
+                lambda row: clean_text(
+                    f"{row['career_name']} "
+                    f"{row['category']} "
+                    f"{row['interests']} "
+                    f"{row['required_skills']} "
+                    f"{row['description']} "
+                    f"{row['training_resource']} "
+                    f"{row['opportunity_type']} "
+                    f"{row['work_mode']}"
+                ),
+                axis=1
+            )
 
-            work_mode = str(row["work_mode"]).lower()
-            opportunity = str(row["opportunity_type"]).lower()
+            filtered_vectors = self.vectorizer.transform(filtered_df["combined_text"])
 
-            if "home" in work_mode:
-                tags.append("🏠 Work From Home")
+            # 4. User text
+            user_text = clean_text(
+                f"{user_data.get('education', '')} "
+                f"{user_data.get('interests', '')} "
+                f"{user_data.get('skills', '')} "
+                f"{user_data.get('career_goal', '')} "
+                f"{user_data.get('career_stage', '')} "
+                f"{user_data.get('personality_type', '')} "
+                f"{user_data.get('preferred_work_type', '')} "
+                f"{user_data.get('preferred_work_mode', '')}"
+            )
 
-            if "self" in opportunity or "business" in opportunity:
-                tags.append("💡 Low Investment Business")
+            user_vector = self.vectorizer.transform([user_text])
+            scores = cosine_similarity(user_vector, filtered_vectors).flatten()
 
-            if user_data.get("education", "").lower() in ["8th", "10th", "12th"]:
-                tags.append("👩‍💼 Career Restart Friendly")
-            results.append({
-            "career_name": row["career_name"],
-            "category": row["category"],
-            "match_score": round(float(scores[idx]), 2),
-            "description": row["description"],
+            filtered_df = filtered_df.reset_index(drop=True)
 
-            "user_entered_skills": user_skills_list,
-            "required_skills": required_skills,
-            "matched_skills": matched_skills,
-            "missing_skills": missing_skills,
+            # 5. Get unique top careers
+            seen = set()
+            top_indices = []
 
-            "training_resources": parse_training_resources(row["training_resource"]),
-            "learning_roadmap": build_learning_roadmap(
-                row["career_name"],
-                missing_skills,
-                matched_skills
-            ),
+            for idx in scores.argsort()[::-1]:
+                career_name = filtered_df.iloc[idx]["career_name"]
 
-            # NEW FEATURES
-            "explanation": explanation,
-            "readiness_score": round(readiness * 100),
-            "tags": tags,
+                if career_name not in seen:
+                    seen.add(career_name)
+                    top_indices.append(idx)
 
-            "opportunity_type": row["opportunity_type"],
-            "work_mode": row["work_mode"]
-        })
+                if len(top_indices) == top_n:
+                    break
 
-        return results
+            # 6. User skills
+            user_skills = set(normalize_list_from_text(user_data.get("skills", "")))
+            user_skills_list = list(user_skills)
+
+            results = []
+
+            for idx in top_indices:
+                row = filtered_df.iloc[idx]
+
+                required_skills = [
+                    s.strip()
+                    for s in str(row["required_skills"]).split(",")
+                    if s.strip()
+                ]
+
+                matched_skills = [
+                    skill for skill in required_skills
+                    if skill.lower() in user_skills
+                ]
+
+                missing_skills = [
+                    skill for skill in required_skills
+                    if skill.lower() not in user_skills
+                ]
+
+                readiness = len(matched_skills) / len(required_skills) if required_skills else 0
+
+                explanation = (
+                    f"This career is recommended because your interests in "
+                    f"{user_data.get('interests', 'selected areas')} and personality type "
+                    f"{user_data.get('personality_type', 'General')} match this role."
+                )
+
+                tags = []
+
+                work_mode = str(row["work_mode"]).lower()
+                opportunity = str(row["opportunity_type"]).lower()
+
+                if "home" in work_mode:
+                    tags.append("🏠 Work From Home")
+
+                if "flexible" in work_mode:
+                    tags.append("⏱ Flexible")
+
+                if "self" in opportunity or "business" in opportunity:
+                    tags.append("💡 Low Investment Business")
+
+                if user_data.get("education", "").lower() in ["8th", "10th", "12th"]:
+                    tags.append("👩‍💼 Career Restart Friendly")
+                career_name = row["career_name"]
+
+                job_links = {
+                    "linkedin": f"https://www.linkedin.com/jobs/search/?keywords={career_name.replace(' ', '%20')}",
+                    "naukri": f"https://www.naukri.com/{career_name.replace(' ', '-')}-jobs"
+                }
+                results.append({
+                    "career_name": row["career_name"],
+                    "category": row["category"],
+                    "match_score": round(float(scores[idx]), 2),
+                    "description": row["description"],
+
+                    "user_entered_skills": user_skills_list,
+                    "required_skills": required_skills,
+                    "matched_skills": matched_skills,
+                    "missing_skills": missing_skills,
+
+                    "training_resources": parse_training_resources(row["training_resource"]),
+                    "learning_roadmap": build_learning_roadmap(
+                        row["career_name"],
+                        missing_skills,
+                        matched_skills
+                    ),
+                    "job_links": job_links,
+                    "personality_type": user_data.get("personality_type", "General"),
+                    "explanation": explanation,
+                    "readiness_score": round(readiness * 100),
+                    "tags": tags,
+
+                    "opportunity_type": row["opportunity_type"],
+                    "work_mode": row["work_mode"],
+                })
+
+            return {
+                "predicted_category": predicted_category,
+                "recommended_careers": results
+            }
+
+            

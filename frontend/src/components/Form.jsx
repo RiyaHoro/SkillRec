@@ -5,16 +5,38 @@ function Form() {
   const navigate = useNavigate();
 
   const interestOptions = [
-    "Coding", "Design", "Business", "Teaching", "Cooking",
-    "Writing", "Marketing", "Fashion", "Beauty", "Data",
-    "Social Media", "Helping People", "Crafts", "Fitness"
+    "Coding",
+    "Design",
+    "Business",
+    "Teaching",
+    "Cooking",
+    "Writing",
+    "Marketing",
+    "Fashion",
+    "Beauty",
+    "Data",
+    "Social Media",
+    "Helping People",
+    "Crafts",
+    "Fitness",
   ];
-
+  const [customInterests, setCustomInterests] = useState("")
   const skillOptions = [
-    "Python", "JavaScript", "Communication", "Excel",
-    "Canva", "Teaching", "Cooking", "Stitching",
-    "Makeup", "Sales", "Writing", "Social Media",
-    "Customer Handling", "Design", "Typing"
+    "Python",
+    "JavaScript",
+    "Communication",
+    "Excel",
+    "Canva",
+    "Teaching",
+    "Cooking",
+    "Stitching",
+    "Makeup",
+    "Sales",
+    "Writing",
+    "Social Media",
+    "Customer Handling",
+    "Design",
+    "Typing",
   ];
 
   const careerStages = [
@@ -22,7 +44,7 @@ function Form() {
     "Job Seeker",
     "Career Restart",
     "Homemaker",
-    "Want to Start Business"
+    "Want to Start Business",
   ];
 
   const workPreferences = [
@@ -30,7 +52,7 @@ function Form() {
     "Office",
     "Home-Based",
     "Flexible",
-    "Business"
+    "Business",
   ];
 
   const [selectedInterests, setSelectedInterests] = useState([]);
@@ -62,8 +84,16 @@ function Form() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!age || !education || !careerStage || selectedInterests.length === 0 || selectedSkills.length === 0) {
-      setError("Please fill age, education, career stage, interests, and skills.");
+    if (
+      !age ||
+      !education ||
+      !careerStage ||
+      (selectedInterests.length === 0 && customInterests.trim() === "") ||
+      selectedSkills.length === 0
+    ) {
+      setError(
+        "Please fill age, education, career stage, interests, and skills.",
+      );
       return;
     }
 
@@ -72,43 +102,52 @@ function Form() {
 
     const finalSkills = [
       ...selectedSkills,
-      ...customSkills.split(",").map((s) => s.trim()).filter(Boolean),
+      ...customSkills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
     ];
 
     const modeMap = {
-      "Any": "any",
-      "Office": "office",
+      Any: "any",
+      Office: "office",
       "Home-Based": "home",
-      "Flexible": "flexible",
-      "Business": "any",
+      Flexible: "flexible",
+      Business: "any",
     };
 
     const typeMap = {
-      "Any": "any",
-      "Office": "job",
+      Any: "any",
+      Office: "job",
       "Home-Based": "self",
-      "Flexible": "any",
-      "Business": "business",
+      Flexible: "any",
+      Business: "business",
     };
-
+    const finalInterests = [
+      ...selectedInterests,
+      ...customInterests
+        .split(",")
+        .map((i) => i.trim())
+        .filter(Boolean),
+    ];
     const payload = {
       age,
       education,
-      career_stage: careerStage,
-      interests: selectedInterests.join(", "),
+      interests: finalInterests.join(", "),
       skills: finalSkills.join(", "),
       preferred_work_mode: modeMap[workPreference] || "any",
       preferred_work_type: typeMap[workPreference] || "any",
-      career_goal: careerStage,
+      career_goal: "",
+      career_stage: careerStage,
     };
 
     try {
       const res = await fetch("http://localhost:5000/recommend", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error("Failed");
@@ -119,7 +158,9 @@ function Form() {
       navigate("/results", { state: data });
     } catch (err) {
       console.error(err);
-      setError("Backend not connected. Make sure Flask is running on localhost:5000.");
+      setError(
+        "Backend not connected. Make sure Flask is running on localhost:5000.",
+      );
     } finally {
       setLoading(false);
     }
@@ -133,7 +174,8 @@ function Form() {
         </h2>
 
         <p className="text-gray-600 text-center mb-6">
-          Select a few details so SkillSakhi can suggest practical career paths for your life stage.
+          Select a few details so SkillSakhi can suggest practical career paths
+          for your life stage.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-7">
@@ -170,9 +212,15 @@ function Form() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">Career Stage *</h3>
+            <h3 className="font-semibold mb-2">Career Stage</h3>
             <div className="flex flex-wrap gap-2">
-              {careerStages.map((item) => (
+              {[
+                "Student",
+                "Job Seeker",
+                "Career Restart",
+                "Homemaker",
+                "Want to Start Business",
+              ].map((item) => (
                 <div
                   key={item}
                   onClick={() => setCareerStage(item)}
@@ -183,7 +231,6 @@ function Form() {
               ))}
             </div>
           </div>
-
           <div>
             <h3 className="font-semibold mb-2">Work Preference</h3>
             <div className="flex flex-wrap gap-2">
@@ -214,6 +261,13 @@ function Form() {
                 </div>
               ))}
             </div>
+            <input
+              type="text"
+              placeholder="Add your own interests, comma separated"
+              value={customInterests}
+              onChange={(e) => setCustomInterests(e.target.value)}
+              className="mt-3 w-full border p-3 rounded-lg"
+            />
           </div>
 
           <div>
