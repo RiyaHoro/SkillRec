@@ -185,10 +185,8 @@ class HybridCareerRecommender:
     # MAIN RECOMMEND FUNCTION
     # -----------------------------
     def recommend(self, user_data, top_n=5):
-            # 1. Rule-based filtering
-        
             filtered_df = self.filter_by_rules(user_data).copy()
-            # 2. Decision Tree category prediction
+
             predicted_category = self.category_classifier.predict_category(user_data)
 
             category_filtered_df = filtered_df[
@@ -198,7 +196,6 @@ class HybridCareerRecommender:
             if not category_filtered_df.empty:
                 filtered_df = category_filtered_df.copy()
 
-            # 3. Recompute text for filtered careers
             filtered_df["combined_text"] = filtered_df.apply(
                 lambda row: clean_text(
                     f"{row['career_name']} "
@@ -210,12 +207,11 @@ class HybridCareerRecommender:
                     f"{row['opportunity_type']} "
                     f"{row['work_mode']}"
                 ),
-                axis=1
+                axis=1,
             )
 
             filtered_vectors = self.vectorizer.transform(filtered_df["combined_text"])
 
-            # 4. User text
             user_text = clean_text(
                 f"{user_data.get('education', '')} "
                 f"{user_data.get('interests', '')} "
@@ -232,57 +228,59 @@ class HybridCareerRecommender:
 
             filtered_df = filtered_df.reset_index(drop=True)
 
-            # 5. Get unique top careers
-            seen = set()
-            top_indices = []
-
-            for idx in scores.argsort()[::-1]:
-                career_name = filtered_df.iloc[idx]["career_name"]
-
-                if career_name not in seen:
-                    seen.add(career_name)
-                    top_indices.append(idx)
-
-                if len(top_indices) == top_n:
-                    break
-
-            # 6. User skills
             user_skills = set(normalize_list_from_text(user_data.get("skills", "")))
             user_skills_list = list(user_skills)
 
-            results = []
+            scored_results = []
+            seen = set()
 
-            for idx in top_indices:
+            for idx in scores.argsort()[::-1]:
                 row = filtered_df.iloc[idx]
+                career_name = row["career_name"]
+
+                if career_name in seen:
+                    continue
+
+                seen.add(career_name)
 
                 required_skills = [
-                    s.strip()
+                    s.strip().lower()
                     for s in str(row["required_skills"]).split(",")
                     if s.strip()
                 ]
 
                 matched_skills = [
                     skill for skill in required_skills
-                    if skill.lower() in user_skills
+                    if skill in user_skills
                 ]
 
                 missing_skills = [
                     skill for skill in required_skills
-                    if skill.lower() not in user_skills
+                    if skill not in user_skills
                 ]
 
-                readiness = len(matched_skills) / len(required_skills) if required_skills else 0
-
-                explanation = (
-                    f"This career is recommended because your interests in "
-                    f"{user_data.get('interests', 'selected areas')} and personality type "
-                    f"{user_data.get('personality_type', 'General')} match this role."
+                readiness = (
+                    len(matched_skills) / len(required_skills)
+                    if required_skills
+                    else 0
                 )
 
-                tags = []
+                tfidf_score = float(scores[idx])
+
+                # Skip very weak matches
+                if tfidf_score < 0.05 and readiness == 0:
+                    continue
+
+                # Final score combines text similarity + actual skill match
+                final_score = (0.6 * tfidf_score) + (0.4 * readiness)
+
+                if final_score < 0.08:
+                    continue
 
                 work_mode = str(row["work_mode"]).lower()
                 opportunity = str(row["opportunity_type"]).lower()
+
+                tags = []
 
                 if "home" in work_mode:
                     tags.append("🏠 Work From Home")
@@ -293,18 +291,41 @@ class HybridCareerRecommender:
                 if "self" in opportunity or "business" in opportunity:
                     tags.append("💡 Low Investment Business")
 
-                if user_data.get("education", "").lower() in ["8th", "10th", "12th"]:
+                if user_data.get("career_stage", "").lower() in [
+                    "career restart",
+                    "homemaker",
+                    "want to start business",
+                ]:
                     tags.append("👩‍💼 Career Restart Friendly")
-                career_name = row["career_name"]
+
+                if user_data.get("education", "").lower() in ["8th", "10th", "12th"]:
+                    tags.append("🎓 Beginner Friendly")
+
+                if user_data.get("personality_type"):
+                    explanation = (
+                        f"This career is recommended because it matches your interests in "
+                        f"{user_data.get('interests', 'selected areas')}, your skills, "
+                        f"and your {user_data.get('personality_type')} personality type."
+                    )
+                else:
+                    explanation = (
+                        f"This career is recommended because it matches your interests in "
+                        f"{user_data.get('interests', 'selected areas')} and your current skills."
+                    )
+
+                career_query = career_name.replace(" ", "%20")
+                naukri_query = career_name.lower().replace(" ", "-")
 
                 job_links = {
-                    "linkedin": f"https://www.linkedin.com/jobs/search/?keywords={career_name.replace(' ', '%20')}",
-                    "naukri": f"https://www.naukri.com/{career_name.replace(' ', '-')}-jobs"
+                    "linkedin": f"https://www.linkedin.com/jobs/search/?keywords={career_query}",
+                    "naukri": f"https://www.naukri.com/{naukri_query}-jobs",
                 }
-                results.append({
-                    "career_name": row["career_name"],
+
+                scored_results.append({
+                    "career_name": career_name,
                     "category": row["category"],
-                    "match_score": round(float(scores[idx]), 2),
+                    "match_score": round(final_score, 2),
+                    "tfidf_score": round(tfidf_score, 2),
                     "description": row["description"],
 
                     "user_entered_skills": user_skills_list,
@@ -314,23 +335,29 @@ class HybridCareerRecommender:
 
                     "training_resources": parse_training_resources(row["training_resource"]),
                     "learning_roadmap": build_learning_roadmap(
-                        row["career_name"],
+                        career_name,
                         missing_skills,
-                        matched_skills
+                        matched_skills,
                     ),
-                    "job_links": job_links,
-                    "personality_type": user_data.get("personality_type", "General"),
+
+                    "personality_type": user_data.get("personality_type", ""),
                     "explanation": explanation,
                     "readiness_score": round(readiness * 100),
                     "tags": tags,
 
                     "opportunity_type": row["opportunity_type"],
                     "work_mode": row["work_mode"],
+                    "job_links": job_links,
                 })
+
+            scored_results = sorted(
+                scored_results,
+                key=lambda x: x["match_score"],
+                reverse=True,
+            )
 
             return {
                 "predicted_category": predicted_category,
-                "recommended_careers": results
+                "recommended_careers": scored_results[:top_n],
             }
-
             

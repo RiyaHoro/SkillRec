@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+frontend/src/firebase.js
+.env

@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
+import { useAuth } from "../context/AuthContext";
+
 import {
   FaCheckCircle,
   FaPrint,
@@ -15,7 +17,7 @@ import {
 function Results() {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const { currentUser } = useAuth();
   const savedData = JSON.parse(localStorage.getItem("skillsakhi_results"));
   const data = location.state || savedData || {};
 
@@ -27,14 +29,18 @@ function Results() {
   const topCareer = careers[0];
 
   const saveCareer = (career) => {
-    const saved = JSON.parse(localStorage.getItem("saved_careers")) || [];
+    const userKey = currentUser
+      ? `saved_careers_${currentUser.uid}`
+      : "saved_careers_guest";
+
+    const saved = JSON.parse(localStorage.getItem(userKey)) || [];
 
     const exists = saved.some(
       (item) => item.career_name === career.career_name,
     );
 
     if (!exists) {
-      localStorage.setItem("saved_careers", JSON.stringify([...saved, career]));
+      localStorage.setItem(userKey, JSON.stringify([...saved, career]));
       alert("Career saved!");
     } else {
       alert("Already saved!");
