@@ -219,7 +219,7 @@ function Results() {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <p className="text-lg font-semibold mb-2">
+                   <p className="text-lg font-semibold mb-2 text-white">
                       Confidence Score
                     </p>
                     <div className="w-full h-5 bg-white/20 rounded-full overflow-hidden">
