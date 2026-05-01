@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import ResumeGenerator from "./components/ResumeGenerator";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/resume-generator" element={<ResumeGenerator />} />
 
         <Route
           path="/dashboard"

@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import { useAuth } from "../context/AuthContext";
+import CareerChatbot from "./CareerChatbot";
 
 import {
   FaCheckCircle,
@@ -498,12 +499,17 @@ function Results() {
                               </p>
                             )}
                           </div>
+                          <button
+                            onClick={() => navigate("/resume-generator")}
+                            className="w-full bg-green-600 text-white py-4 my-3 rounded-2xl font-bold hover:bg-green-700"
+                          >
+                            Generate Resume & Cover Letter
+                          </button>
                           {/* JOB OPPORTUNITIES */}
                           <div className="mt-6">
                             <p className="font-semibold text-gray-800 mb-3">
                               Job Opportunities
                             </p>
-
                             <div className="grid md:grid-cols-2 gap-3">
                               <a
                                 href={
@@ -669,6 +675,7 @@ function Results() {
                 <li>📚 Suggests beginner-friendly courses</li>
               </ul>
             </div>
+            <CareerChatbot career={careers[0]} userProfile={userProfile} />
           </div>
         </div>
       </div>
