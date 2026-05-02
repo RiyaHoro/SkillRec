@@ -1,61 +1,176 @@
-career_name,category,min_education,interests,required_skills,description,training_resource,opportunity_type,work_mode
+career_name,category,min_education,interests,required_skills,description,training_resource,opportunity_type,work_mode,women_friendly,career_restart,investment_level,safety_level
 
-Data Analyst,Formal Job,Graduate,"analytics,data,computers","python,sql,excel,power bi,statistics,data visualization","Analyze data and build dashboards for business insights.","Google Data Analytics|Coursera|Beginner|https://www.coursera.org/professional-certificates/google-data-analytics","job","office"
+Data Analyst,Formal Job,Graduate,"analytics,data","python,sql,excel,visualization","Analyze data for insights.","Google Data Analytics|Coursera|Beginner|https://www.coursera.org","job","office","yes","yes","low","high"
 
-Web Developer,Formal Job,12th,"coding,technology","html,css,javascript,react,git","Build websites and web apps.","freeCodeCamp Web Dev|freeCodeCamp|Beginner|https://www.freecodecamp.org/learn","job/freelance","flexible"
+Frontend Developer,Formal Job,12th,"coding,design","html,css,javascript,react","Build websites UI.","Frontend|freeCodeCamp|Beginner|https://www.freecodecamp.org","job","flexible","yes","yes","low","high"
 
-Backend Developer,Formal Job,Graduate,"coding,logic","python,flask,django,api,sql","Develop server-side logic and APIs.","Python Backend|YouTube|Beginner|https://www.youtube.com/results?search_query=python+backend","job","office"
+Backend Developer,Formal Job,Graduate,"coding,logic","python,api,sql","Develop backend systems.","Backend|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
 
-App Developer,Formal Job,Graduate,"coding,mobile apps","flutter,android,java,kotlin,ui design","Build mobile applications.","Flutter Course|YouTube|Beginner|https://www.youtube.com/results?search_query=flutter+course","job/freelance","flexible"
+UI UX Designer,Creative Career,Graduate,"design,technology","figma,wireframing","Design user interfaces.","UX|Coursera|Beginner|https://www.coursera.org","job","flexible","yes","yes","low","high"
 
-Digital Marketing Assistant,Formal Job,12th,"social media,marketing","seo,content writing,canva,social media","Manage online marketing campaigns.","Google Digital Marketing|Google|Beginner|https://skillshop.exceedlms.com","job/freelance","flexible"
+Content Writer,Flexible Work,12th,"writing","writing,seo","Write blogs.","Content|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
 
-Graphic Designer,Creative Career,12th,"design,creativity","canva,figma,design principles","Create visual content.","Canva Design School|Canva|Beginner|https://www.canva.com/design-school/","freelance","flexible"
+Graphic Designer,Creative Career,12th,"design","canva,figma","Create graphics.","Canva|Canva|Beginner|https://www.canva.com","freelance","home","yes","yes","low","high"
 
-UI UX Designer,Creative Career,Graduate,"design,technology","figma,wireframing,prototyping","Design user-friendly apps.","Google UX|Coursera|Beginner|https://www.coursera.org","job","flexible"
+Social Media Manager,Formal Job,12th,"social media","content,analytics","Manage social accounts.","SM|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
 
-Content Writer,Flexible Work,12th,"writing,creativity","writing,grammar,seo","Write blogs and articles.","Content Writing|YouTube|Beginner|https://www.youtube.com/results?search_query=content+writing","freelance","home"
+Virtual Assistant,Remote Job,12th,"organization","email,excel","Remote admin work.","VA|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
 
-Freelance Blogger,Flexible Work,12th,"writing,blogging","writing,seo,content strategy","Write blogs and earn online.","Blogging Guide|YouTube|Beginner|https://www.youtube.com/results?search_query=blogging","freelance","home"
+Online Tutor,Flexible Work,Graduate,"teaching","subject knowledge","Teach online.","Teaching|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
 
-Data Entry Operator,Entry-Level Job,12th,"typing,computers","typing,excel,data entry","Handle office data work.","Typing Practice|TypingClub|Beginner|https://www.typingclub.com","job","office"
+Freelance Resume Writer,Remote Job,Graduate,"writing","writing,formatting","Create resumes.","Resume|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
 
-Customer Support Executive,Formal Job,12th,"communication,helping","communication,problem solving","Assist customers.","Customer Support|YouTube|Beginner|https://www.youtube.com/results?search_query=customer+support","job","flexible"
+YouTube Creator,Creative Career,12th,"video","editing,content","Create videos.","YT|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","medium"
 
-Office Assistant,Entry-Level Job,12th,"office work","ms office,communication","Support office tasks.","MS Office|YouTube|Beginner|https://www.youtube.com/results?search_query=ms+office","job","office"
+Voice Over Artist,Creative Career,12th,"voice","voice control","Record voiceovers.","Voice|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
 
-Teacher,Formal Job,Graduate,"teaching,children","communication,subject knowledge","Teach students.","Teaching Skills|YouTube|Beginner|https://www.youtube.com/results?search_query=teaching+skills","job","office"
+Data Entry Operator,Entry-Level,12th,"typing","typing,excel","Data entry work.","Typing|TypingClub|Beginner|https://www.typingclub.com","job","office","yes","yes","low","high"
 
-Tuition Teacher,Flexible Work,12th,"teaching","communication,subject knowledge","Teach students from home.","Teaching Tips|YouTube|Beginner|https://www.youtube.com/results?search_query=teaching+tutorial","self-employment","home"
+Customer Support Executive,Formal Job,12th,"communication","communication","Assist customers.","Support|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
 
-Home Baker,Small Business,10th,"cooking,baking","baking,food safety,pricing","Start baking business.","Baking Basics|YouTube|Beginner|https://www.youtube.com/results?search_query=baking","self-employment","home"
+HR Assistant,Formal Job,Graduate,"management","communication","HR tasks.","HR|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
 
-Tailor,Skill-Based Livelihood,8th,"stitching,fashion","stitching,cutting,measurement","Provide tailoring services.","Tailoring|YouTube|Beginner|https://www.youtube.com/results?search_query=tailoring","self-employment","home"
+Teacher,Formal Job,Graduate,"teaching","communication","Teach students.","Teaching|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
 
-Beautician,Skill-Based Livelihood,10th,"beauty","makeup,hair styling","Provide beauty services.","Makeup Course|YouTube|Beginner|https://www.youtube.com/results?search_query=makeup","self-employment","flexible"
+Tuition Teacher,Flexible Work,12th,"teaching","communication","Teach at home.","Teaching|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
 
-Mehendi Artist,Skill-Based Livelihood,8th,"art,design","mehendi design","Apply mehendi designs.","Mehendi|YouTube|Beginner|https://www.youtube.com/results?search_query=mehendi","self-employment","flexible"
+Home Baker,Small Business,8th,"cooking","baking","Sell baked goods.","Baking|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
 
-Handicraft Seller,Small Business,8th,"crafts","craft making,selling","Sell handmade products.","Handicraft|YouTube|Beginner|https://www.youtube.com/results?search_query=handicraft","self-employment","home"
+Tailor,Skill-Based,8th,"fashion","stitching","Tailoring work.","Tailoring|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
 
-Reseller,Small Business,10th,"business,sales","selling,communication","Sell products online.","Reselling|YouTube|Beginner|https://www.youtube.com/results?search_query=reselling","self-employment","home"
+Beautician,Skill-Based,10th,"beauty","makeup","Beauty services.","Makeup|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
 
-Tiffin Service Owner,Small Business,8th,"cooking","cooking,packaging","Start food service.","Food Business|YouTube|Beginner|https://www.youtube.com/results?search_query=tiffin+service","self-employment","home"
+Mehendi Artist,Skill-Based,8th,"design","mehendi","Apply mehendi.","Mehendi|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
 
-Entrepreneur,Business Path,10th,"business","planning,marketing","Start own business.","Startup Basics|YouTube|Beginner|https://www.youtube.com/results?search_query=startup","self-employment","flexible"
+Handicraft Seller,Small Business,8th,"crafts","craft making","Sell crafts.","Craft|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
 
-Social Media Manager,Formal Job,12th,"social media","content,analytics,seo","Manage social accounts.","Social Media|YouTube|Beginner|https://www.youtube.com/results?search_query=social+media","job","flexible"
+Reseller,Small Business,10th,"sales","selling","Sell online.","Reselling|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","medium"
 
-Photographer,Creative Career,12th,"photography","camera,editing","Take professional photos.","Photography|YouTube|Beginner|https://www.youtube.com/results?search_query=photography","freelance","flexible"
+Tiffin Service Owner,Small Business,8th,"cooking","cooking","Food service.","Food|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
 
-Video Editor,Creative Career,12th,"editing","premiere pro,editing","Edit videos.","Video Editing|YouTube|Beginner|https://www.youtube.com/results?search_query=video+editing","freelance","flexible"
+Entrepreneur,Business,10th,"business","planning","Start business.","Startup|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","medium","medium"
 
-Fitness Trainer,Flexible Work,12th,"fitness","training,nutrition","Train clients.","Fitness Training|YouTube|Beginner|https://www.youtube.com/results?search_query=fitness+trainer","self-employment","flexible"
+Photographer,Creative Career,12th,"photography","camera","Photography.","Photo|YouTube|Beginner|https://www.youtube.com","freelance","flexible","yes","yes","medium","medium"
 
-Yoga Instructor,Flexible Work,12th,"fitness,yoga","yoga,teaching","Teach yoga.","Yoga Training|YouTube|Beginner|https://www.youtube.com/results?search_query=yoga","self-employment","flexible"
+Video Editor,Creative Career,12th,"editing","editing","Edit videos.","Edit|YouTube|Beginner|https://www.youtube.com","freelance","flexible","yes","yes","low","high"
 
-Event Planner,Creative Career,12th,"events,management","planning,communication","Plan events.","Event Planning|YouTube|Beginner|https://www.youtube.com/results?search_query=event+planning","freelance","flexible"
+Fitness Trainer,Flexible Work,12th,"fitness","training","Train clients.","Fitness|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","medium"
 
-Makeup Artist,Creative Career,10th,"beauty","makeup,creativity","Professional makeup.","Makeup Artist|YouTube|Beginner|https://www.youtube.com/results?search_query=makeup+artist","self-employment","flexible"
+Yoga Instructor,Flexible Work,12th,"yoga","teaching","Teach yoga.","Yoga|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
 
-Sales Executive,Formal Job,12th,"sales,communication","selling,communication","Sell products/services.","Sales Training|YouTube|Beginner|https://www.youtube.com/results?search_query=sales","job","office"
+Event Planner,Creative Career,12th,"events","planning","Organize events.","Event|YouTube|Beginner|https://www.youtube.com","freelance","flexible","yes","yes","medium","medium"
+
+Makeup Artist,Creative Career,10th,"beauty","makeup","Makeup services.","Makeup|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
+
+Sales Executive,Formal Job,12th,"sales","communication","Sales job.","Sales|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","medium"
+
+Papad Business,Small Business,5th,"cooking","cooking","Sell papad.","Papad|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Pickle Business,Small Business,5th,"cooking","cooking","Sell pickles.","Pickle|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Flower Garland Maker,Skill-Based,5th,"flowers","craft","Make garlands.","Garland|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","medium"
+
+Candle Business,Small Business,8th,"crafts","candle making","Sell candles.","Candle|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Soap Making Business,Small Business,8th,"crafts","soap making","Sell soap.","Soap|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Boutique Owner,Small Business,10th,"fashion","design,selling","Run boutique.","Boutique|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","medium","medium"
+
+NGO Worker,Social,Graduate,"social","communication","Social work.","NGO|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
+
+Bank Clerk,Government Job,Graduate,"finance","math,banking","Bank job.","Bank|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+SSC Clerk,Government Job,Graduate,"government","reasoning","Gov job.","SSC|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Railway Clerk,Government Job,12th,"government","reasoning","Railway job.","Railway|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Anganwadi Worker,Government Job,10th,"children","care","Child care.","Gov|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
+
+Nurse,Healthcare,Graduate,"health","medical","Patient care.","Nursing|YouTube|Beginner|https://www.youtube.com","job","hospital","yes","yes","medium","high"
+
+Lab Technician,Healthcare,Graduate,"science","lab work","Lab tests.","Lab|YouTube|Beginner|https://www.youtube.com","job","hospital","yes","yes","low","high"
+
+Pharmacist,Healthcare,Graduate,"medicine","pharmacy","Medicine dispensing.","Pharma|YouTube|Beginner|https://www.youtube.com","job","shop","yes","yes","medium","high"
+
+Receptionist,Entry-Level,12th,"communication","communication","Front desk.","Reception|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Hotel Staff,Service,10th,"hospitality","service","Hotel work.","Hotel|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","medium"
+
+Air Hostess,Aviation,Graduate,"travel","communication","Cabin crew.","Airhostess|YouTube|Beginner|https://www.youtube.com","job","travel","yes","no","high","high"
+Career Counselor,Professional Role,Graduate,"guidance,communication","counseling,communication","Guide students in career decisions.","Counseling|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
+
+School Administrator,Education,Graduate,"management,education","management,organization","Manage school operations.","Admin|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Kindergarten Teacher,Education,12th,"children,teaching","patience,teaching","Teach small children.","Teaching|YouTube|Beginner|https://www.youtube.com","job","school","yes","yes","low","high"
+
+Special Educator,Education,Graduate,"teaching,care","special education","Teach special needs children.","SpecialEd|YouTube|Beginner|https://www.youtube.com","job","school","yes","yes","low","high"
+
+Dietician,Healthcare,Graduate,"health,nutrition","nutrition,planning","Create diet plans.","Diet|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
+
+Child Psychologist,Healthcare,Graduate,"psychology,children","counseling,analysis","Help children mentally.","Psychology|YouTube|Beginner|https://www.youtube.com","job","clinic","yes","yes","medium","high"
+
+Telecaller,Entry-Level,12th,"communication,sales","communication","Call clients.","Telecaller|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","medium"
+
+E-commerce Seller,Small Business,10th,"business,online","selling,marketing","Sell products online.","Ecom|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","medium"
+
+Dropshipping Business,Online Business,12th,"business,online","marketing,ads","Run dropshipping store.","Dropshipping|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","medium"
+
+Affiliate Marketer,Online Business,12th,"marketing,content","seo,marketing","Earn via affiliate links.","Affiliate|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Podcast Host,Creative Career,12th,"speaking,content","communication,audio","Host podcasts.","Podcast|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Translator,Language Career,Graduate,"language","translation,grammar","Translate content.","Translation|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
+
+Proofreader,Writing Career,Graduate,"writing,reading","grammar,editing","Check content errors.","Proofreading|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
+
+Copywriter,Marketing Career,Graduate,"writing,marketing","copywriting,seo","Write ad copies.","Copywriting|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
+
+Interior Designer,Creative Career,Graduate,"design,home","design,planning","Design interiors.","Interior|YouTube|Beginner|https://www.youtube.com","freelance","flexible","yes","yes","medium","high"
+
+Fashion Designer,Creative Career,Graduate,"fashion,design","design,stitching","Design clothes.","Fashion|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","medium","medium"
+
+Jewelry Designer,Creative Career,10th,"design,crafts","jewelry making","Design jewelry.","Jewelry|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Cake Decorator,Food Career,8th,"cooking,design","cake design","Decorate cakes.","Cake|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","high"
+
+Street Food Vendor,Small Business,5th,"cooking,sales","cooking","Sell street food.","Food|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","medium"
+
+Dairy Business,Small Business,5th,"animals,food","animal care","Milk business.","Dairy|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","medium","medium"
+
+Organic Farming,Agri Career,5th,"farming,nature","farming","Grow organic crops.","Farming|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","medium","medium"
+
+Plant Nursery Owner,Agri Business,8th,"plants,nature","gardening","Sell plants.","Nursery|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
+
+Pet Care Provider,Service Job,10th,"animals","pet care","Take care of pets.","PetCare|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
+
+House Cleaner,Service Job,5th,"cleaning","cleaning","Home cleaning services.","Cleaning|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","medium"
+
+Laundry Service,Small Business,5th,"cleaning","washing","Laundry services.","Laundry|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","medium"
+
+Packing Job Worker,Entry-Level,5th,"packing","packing","Packaging work.","Packing|YouTube|Beginner|https://www.youtube.com","job","factory","yes","yes","low","medium"
+
+Factory Worker,Entry-Level,5th,"labor","manual work","Factory work.","Factory|YouTube|Beginner|https://www.youtube.com","job","factory","yes","yes","low","medium"
+
+Delivery Coordinator,Logistics,12th,"management","coordination","Manage deliveries.","Logistics|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","medium"
+
+Travel Agent,Service Job,12th,"travel,planning","booking,communication","Plan trips.","Travel|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
+
+Tour Guide,Travel Career,12th,"travel,history","communication","Guide tourists.","Tour|YouTube|Beginner|https://www.youtube.com","job","travel","yes","yes","low","medium"
+
+Library Assistant,Education,12th,"books","organization","Library work.","Library|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Research Assistant,Academic,Graduate,"research","analysis","Assist research.","Research|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Journalist,Media Career,Graduate,"writing,news","reporting","News reporting.","Journalism|YouTube|Beginner|https://www.youtube.com","job","field","yes","yes","low","medium"
+
+News Anchor,Media Career,Graduate,"speaking,media","communication","Anchor news.","Anchor|YouTube|Beginner|https://www.youtube.com","job","studio","yes","no","medium","high"
+
+Radio Jockey,Media Career,12th,"voice,entertainment","communication","Host radio.","RJ|YouTube|Beginner|https://www.youtube.com","job","studio","yes","yes","low","high"
+
+Makeup Trainer,Beauty Career,10th,"beauty,teaching","makeup,teaching","Teach makeup.","Makeup|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
+
+Spa Therapist,Beauty Career,10th,"wellness","therapy","Provide spa services.","Spa|YouTube|Beginner|https://www.youtube.com","job","spa","yes","yes","low","high"
+
+Hair Stylist,Beauty Career,10th,"beauty","hair styling","Hair styling.","Hair|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
+
+Nail Artist,Beauty Career,10th,"beauty,design","nail art","Nail services.","Nail|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"

@@ -82,7 +82,7 @@ function Results() {
 
   const accuracy = Math.max(
     48,
-    Math.round((topCareer?.match_score || 0) * 100),
+    Math.round((topCareer?.match_score || 0) ),
   );
   const downloadPDF = () => {
     const doc = new jsPDF();
