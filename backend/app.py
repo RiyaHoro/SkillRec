@@ -4,8 +4,17 @@ from model.recommender import HybridCareerRecommender
 from dotenv import load_dotenv
 import os
 import requests
+import google.generativeai as genai
 
 load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    gemini_model = genai.GenerativeModel("gemini-2.5-flash")
+else:
+    gemini_model = None
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
@@ -61,148 +70,99 @@ def generate_resume():
     location = user_profile.get("location", "Your Location")
 
     education = user_profile.get("education", "Your Education")
-    skills_text = user_profile.get("skills", "")
     interests = user_profile.get("interests", "N/A")
     career_stage = user_profile.get("career_stage", "N/A")
     preferred_work_mode = user_profile.get("preferred_work_mode", "Flexible")
 
-    career_name = career.get("career_name", "Recommended Career Role")
-    category = career.get("category", "Career Field")
+    career_name = career.get("career_name", "").strip() or "Career Role"
 
-    matched = career.get("matched_skills", [])
-    missing = career.get("missing_skills", [])
-    required = career.get("required_skills", [])
+    role_library = {
+        "digital marketing assistant": {
+            "category": "Marketing",
+            "skills": ["Canva", "Social Media Marketing", "SEO", "Content Writing", "Basic Analytics"],
+            "tools": ["Canva", "Instagram", "Facebook", "Google Analytics", "Google Search Console"],
+            "projects": [
+                "Created a sample Instagram content calendar for a small business",
+                "Designed promotional posts using Canva for a digital campaign",
+                "Practiced SEO keyword research and blog content optimization"
+            ],
+            "keywords": ["Digital Marketing", "SEO", "Social Media", "Content Marketing", "Canva"]
+        },
+        "data analyst": {
+            "category": "Data Analytics",
+            "skills": ["Excel", "SQL", "Python", "Power BI", "Data Cleaning"],
+            "tools": ["Excel", "SQL", "Python", "Power BI", "Tableau"],
+            "projects": [
+                "Analyzed sales data using Excel and created dashboards",
+                "Cleaned and visualized datasets using Python",
+                "Built a Power BI dashboard to show business insights"
+            ],
+            "keywords": ["Data Analysis", "Excel", "SQL", "Python", "Dashboard", "Power BI"]
+        },
+        "web developer": {
+            "category": "Web Development",
+            "skills": ["HTML", "CSS", "JavaScript", "React", "Git"],
+            "tools": ["VS Code", "GitHub", "React", "Tailwind CSS", "Vercel"],
+            "projects": [
+                "Built a responsive portfolio website",
+                "Created a React-based web application",
+                "Designed reusable UI components using Tailwind CSS"
+            ],
+            "keywords": ["Frontend Development", "React", "JavaScript", "HTML", "CSS"]
+        },
+        "ui ux designer": {
+            "category": "Design",
+            "skills": ["Figma", "Wireframing", "Prototyping", "User Research", "Visual Design"],
+            "tools": ["Figma", "Canva", "Adobe XD"],
+            "projects": [
+                "Designed mobile app wireframes for a career guidance platform",
+                "Created a clickable prototype in Figma",
+                "Improved UI layout based on user-friendly design principles"
+            ],
+            "keywords": ["UI Design", "UX Research", "Wireframe", "Prototype", "Figma"]
+        },
+        "teacher": {
+            "category": "Education",
+            "skills": ["Communication", "Lesson Planning", "Subject Knowledge", "Classroom Management"],
+            "tools": ["Google Classroom", "PowerPoint", "YouTube", "Canva"],
+            "projects": [
+                "Prepared beginner-friendly lesson plans",
+                "Created educational presentation materials",
+                "Designed practice worksheets for students"
+            ],
+            "keywords": ["Teaching", "Lesson Planning", "Communication", "Education"]
+        }
+    }
 
-    if isinstance(skills_text, str):
-        user_skills = [s.strip() for s in skills_text.split(",") if s.strip()]
-    else:
-        user_skills = skills_text or []
+    key = career_name.lower().strip()
+    role_data = role_library.get(key)
 
-    core_skills = matched if matched else user_skills
-    learning_skills = missing if missing else required[:3]
+    if not role_data:
+        role_data = {
+            "category": career.get("category", "General"),
+            "skills": career.get("matched_skills", []) or career.get("required_skills", []) or ["Communication", "Problem Solving", "Basic Computer Knowledge"],
+            "tools": career.get("missing_skills", []) or ["Career-relevant tools", "Portfolio Projects"],
+            "projects": [
+                f"Created a beginner portfolio project related to {career_name}",
+                f"Practiced important skills required for {career_name}",
+                f"Built a practical project to understand real-world work in {career_name}"
+            ],
+            "keywords": [career_name, career.get("category", "Career Skills")]
+        }
+
+    category = role_data["category"]
+    core_skills = role_data["skills"]
+    tools = role_data["tools"]
+    projects = role_data["projects"]
+    keywords = role_data["keywords"]
 
     note = """
 NOTE:
-This is a sample resume generated by SkillSakhi. Please edit and customize it before using.
-Add your college/university name, real projects, internship experience, certifications, and correct contact details.
+This is a sample resume generated by SkillSakhi. Please use it as a reference format.
+Edit it by adding your real college/university name, passing year, projects, internship experience, certifications, and correct contact details.
 """
 
-    if template == "fresher":
-        resume = f"""
-{name}
-{email} | {phone} | {location}
-
-{note}
-
-CAREER OBJECTIVE
-Motivated and detail-oriented candidate seeking an entry-level opportunity as a {career_name}.
-Interested in applying skills such as {", ".join(core_skills[:5]) if core_skills else "basic professional skills"} and growing through practical learning.
-
-EDUCATION
-{education}
-Add your college/university name here
-Add passing year here
-
-SKILLS
-{", ".join(core_skills) if core_skills else "Communication, Basic Computer Knowledge, Problem Solving"}
-
-CURRENTLY LEARNING
-{", ".join(learning_skills) if learning_skills else "Career-relevant tools and technologies"}
-
-PROJECTS
-1. {career_name} Portfolio Project
-   - Created a beginner-friendly project related to {career_name}.
-   - Applied skills such as {", ".join(core_skills[:3]) if core_skills else "problem-solving and basic tools"}.
-
-2. Skill Improvement Project
-   - Practiced {", ".join(learning_skills[:3]) if learning_skills else "important career skills"}.
-   - Built confidence through hands-on learning.
-
-CERTIFICATIONS
-Add your certifications or online courses here.
-
-ACHIEVEMENTS
-Add academic achievements, competitions, or participation details here.
-
-DECLARATION
-I hereby declare that the information provided above is true to the best of my knowledge.
-"""
-
-        cover_letter = f"""
-Dear Hiring Manager,
-
-I am writing to apply for an entry-level opportunity as a {career_name}.
-
-I have an educational background in {education} and skills in {", ".join(core_skills[:5]) if core_skills else "relevant beginner skills"}. I am eager to learn, contribute, and grow professionally in this field.
-
-I am currently improving my knowledge of {", ".join(learning_skills[:3]) if learning_skills else "career-relevant tools"} and building practical projects to strengthen my portfolio.
-
-Thank you for considering my application.
-
-Sincerely,
-{name}
-"""
-
-    elif template == "restart":
-        resume = f"""
-{name}
-{email} | {phone} | {location}
-
-{note}
-
-CAREER RESTART SUMMARY
-Motivated candidate restarting or strengthening her career journey with interest in {career_name}.
-Focused on learning, practical projects, and flexible career opportunities.
-
-TARGET ROLE
-{career_name}
-
-CAREER STAGE
-{career_stage}
-
-EDUCATION
-{education}
-Add your college/university name here
-Add passing year here
-
-CURRENT SKILLS
-{", ".join(core_skills) if core_skills else skills_text or "Add your skills here"}
-
-TRANSFERABLE SKILLS
-Communication, Responsibility, Time Management, Adaptability, Problem Solving
-
-CURRENTLY LEARNING
-{", ".join(learning_skills) if learning_skills else "Career-relevant skills"}
-
-PROJECTS / PRACTICAL WORK
-1. {career_name} Practice Project
-   - Built to understand practical tasks related to {career_name}.
-
-2. Career Restart Skill Project
-   - Focused on improving missing skills and confidence.
-
-PREFERRED WORK MODE
-{preferred_work_mode}
-
-CAREER GOAL
-To build a stable and flexible career in {career_name} through continuous learning and beginner-friendly opportunities.
-"""
-
-        cover_letter = f"""
-Dear Hiring Manager,
-
-I am interested in applying for the {career_name} role.
-
-I am currently restarting and strengthening my career journey with a focus on practical learning and skill development. My background includes {education}, along with skills such as {", ".join(core_skills[:5]) if core_skills else skills_text}.
-
-I am responsible, adaptable, and committed to growing professionally. I would appreciate the opportunity to contribute to your organization.
-
-Sincerely,
-{name}
-"""
-
-    else:
-        resume = f"""
+    resume = f"""
 {name}
 {email} | {phone} | {location}
 
@@ -213,8 +173,8 @@ TARGET ROLE
 
 PROFESSIONAL SUMMARY
 Aspiring {career_name} with a background in {education}.
-Skilled in {", ".join(core_skills[:5]) if core_skills else "relevant foundational skills"} and interested in {interests}.
-Focused on building practical experience, improving industry-relevant skills, and becoming job-ready.
+Interested in {interests} and focused on building practical experience in {category}.
+Skilled in {", ".join(core_skills[:5])} and currently improving job-ready skills through projects and continuous learning.
 
 EDUCATION
 {education}
@@ -222,37 +182,45 @@ Add your college/university name here
 Add passing year here
 
 CORE SKILLS
-{", ".join(core_skills) if core_skills else skills_text or "Add your skills here"}
+{", ".join(core_skills)}
 
 TOOLS / LEARNING AREAS
-{", ".join(learning_skills) if learning_skills else "Career-specific tools and technologies"}
+{", ".join(tools)}
 
 PROJECTS
-1. {career_name} Portfolio Project
-   - Designed a project related to {career_name}.
-   - Applied skills such as {", ".join(core_skills[:3]) if core_skills else "basic tools and problem-solving"}.
+1. {projects[0]}
+   - Applied basic concepts related to {career_name}.
+   - Improved practical understanding through hands-on work.
 
-2. Skill Gap Improvement Project
-   - Created to improve knowledge of {", ".join(learning_skills[:3]) if learning_skills else "important missing skills"}.
+2. {projects[1]}
+   - Used relevant tools and techniques required in {category}.
+   - Strengthened portfolio with practical learning.
 
-3. Practical Career Project
-   - Practiced real-world tasks related to {category}.
+3. {projects[2]}
+   - Focused on solving a real-world beginner-level problem.
+   - Improved confidence and job readiness.
 
 CERTIFICATIONS
 Add relevant certifications or online courses here.
 
+CAREER PLAN
+• Build 2–3 strong portfolio projects
+• Improve practical skills in {", ".join(tools[:3])}
+• Apply for internships, freelance work, or beginner-friendly jobs
+• Keep updating resume with real achievements
+
 RELEVANT KEYWORDS
-{career_name}, {category}, {", ".join(required[:8]) if required else ", ".join(core_skills[:8])}
+{", ".join(keywords)}
 """
 
-        cover_letter = f"""
+    cover_letter = f"""
 Dear Hiring Manager,
 
 I am writing to express my interest in the {career_name} role.
 
-My educational background in {education}, along with my skills in {", ".join(core_skills[:5]) if core_skills else skills_text}, makes me interested in starting and growing in this field.
+I have an educational background in {education} and an interest in {category}. I am developing skills in {", ".join(core_skills[:5])} and building practical projects to improve my job readiness.
 
-I am actively improving my knowledge of {", ".join(learning_skills[:3]) if learning_skills else "career-relevant areas"} and building projects to strengthen my practical understanding.
+I am a quick learner, sincere, and motivated to grow professionally. I would be grateful for the opportunity to contribute to your organization and continue learning in this field.
 
 Thank you for considering my application.
 
@@ -264,92 +232,121 @@ Sincerely,
         "resume": resume.strip(),
         "cover_letter": cover_letter.strip()
     })
-    
+
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json() or {}
+        data = request.get_json() or {}
 
-    user_message = data.get("message", "")
-    career_name = data.get("career_name", "")
-    user_profile = data.get("user_profile", {})
+        user_message = data.get("message", "").strip()
+        career_name = data.get("career_name", "").strip()
+        user_profile = data.get("user_profile", {}) or {}
 
-    if not user_message:
-        return jsonify({"reply": "Please ask something."})
+        education = user_profile.get("education", "Not provided")
+        skills = user_profile.get("skills", "Not provided")
+        interests = user_profile.get("interests", "Not provided")
 
-    hf_api_key = os.getenv("HF_API_KEY")
+        if not user_message:
+            return jsonify({"reply": "Please type your question."})
 
-    def fallback(reason="offline"):
-        return f"""
-⚠️ AI unavailable ({reason})
+        prompt = f"""
+    You are SkillSakhi AI Career Assistant.
 
-For {career_name or "this career"}:
+    User Profile:
+    Career: {career_name or "Not selected"}
+    Education: {education}
+    Skills: {skills}
+    Interests: {interests}
 
-• Learn required skills step-by-step  
-• Practice small projects  
-• Build portfolio  
-• Apply for beginner jobs  
+    User Question:
+    {user_message}
 
-Your skills: {user_profile.get("skills", "")}
-"""
+    Give a simple, practical, beginner-friendly answer.
+    Keep it useful for Indian students and freshers.
+    Use short points.
+    """
 
-    if not hf_api_key:
-        return jsonify({"reply": fallback("no API key")})
-
-    try:
-        response = requests.post(
-            "https://api-inference.huggingface.co/models/google/flan-t5-large",
-            headers={
-                "Authorization": f"Bearer {hf_api_key}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "inputs": f"""
-You are a helpful AI assistant.
-
-User Profile:
-Skills: {user_profile.get("skills","")}
-Education: {user_profile.get("education","")}
-
-Career Context: {career_name}
-
-Question: {user_message}
-
-Answer clearly in bullet points:
-"""
-            },
-            timeout=30
-        )
-
-        print("HF status:", response.status_code)
-
+        # Try Gemini first
         try:
-            result = response.json()
-        except:
-            print("Invalid JSON:", response.text)
-            return jsonify({"reply": fallback("invalid response")})
+            if gemini_model:
+                response = gemini_model.generate_content(prompt)
 
-        print("HF result:", result)
+                if response and response.text:
+                    return jsonify({"reply": response.text.strip()})
 
-        if response.status_code != 200:
-            return jsonify({"reply": fallback("API error")})
+        except Exception as e:
+            print("Gemini error:", e)
 
-        reply = ""
+        # Permanent fallback: chatbot still works even if AI/API fails
+        msg = user_message.lower()
+        role = career_name or "your selected career"
 
-        # ✅ SAFE parsing
-        if isinstance(result, list) and len(result) > 0:
-            reply = result[0].get("generated_text", "")
+        if "roadmap" in msg or "start" in msg:
+            reply = f"""
+    For {role}, follow this roadmap:
 
-        elif isinstance(result, dict):
-            reply = result.get("generated_text", "")
+    1. Learn the basic concepts.
+    2. Improve required skills step by step.
+    3. Complete 1–2 beginner projects.
+    4. Create a simple resume and portfolio.
+    5. Apply for internships, freelance work, or entry-level jobs.
+    """
+        elif "skill" in msg:
+            reply = f"""
+    For {role}, focus on:
 
-        if not reply:
-            return jsonify({"reply": fallback("empty response")})
+    1. Communication skills
+    2. Basic computer knowledge
+    3. Problem-solving
+    4. Role-specific technical skills
+    5. Portfolio or practical project work
+    """
+        elif "course" in msg:
+            reply = f"""
+    For {role}, choose beginner-friendly courses from:
+
+    1. YouTube
+    2. Coursera
+    3. Google Digital Garage
+    4. LinkedIn Learning
+    5. FreeCodeCamp or Udemy
+
+    Start with one course and build a small project after completing it.
+    """
+        elif "resume" in msg:
+            reply = f"""
+    For a {role} resume, include:
+
+    1. Professional summary
+    2. Education with college name
+    3. Skills
+    4. Projects
+    5. Certifications
+    6. Internship or fresher experience
+
+    Use the generated resume as a reference format and edit it with your real details.
+    """
+        elif "internship" in msg or "job" in msg:
+            reply = f"""
+    To get an internship for {role}:
+
+    1. Prepare a simple resume.
+    2. Build 1–2 relevant projects.
+    3. Apply on LinkedIn, Internshala, Naukri, and company websites.
+    4. Message recruiters politely.
+    5. Keep improving your skills while applying.
+    """
+        else:
+            reply = f"""
+    I can help you with {role} career guidance.
+
+    You can ask me about:
+    - career roadmap
+    - required skills
+    - courses
+    - resume tips
+    - internships and jobs
+    """
 
         return jsonify({"reply": reply.strip()})
-
-    except Exception as e:
-        print("HF error:", e)
-        return jsonify({"reply": fallback("connection error")})
-    
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

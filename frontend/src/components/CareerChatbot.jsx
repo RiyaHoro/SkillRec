@@ -1,23 +1,30 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function CareerChatbot({ career, userProfile }) {
+  
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Hi, I am your SkillSakhi Career Assistant. Ask me about career path, skills, courses, or jobs.",
+      text: "Hi, I am your SkillSakhi AI Career Assistant. Ask me about career path, skills, courses, resume, or jobs.",
     },
   ]);
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const chatBoxRef = useRef(null);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages, loading]);
 
-    const userText = input;
+  const sendMessage = async (customMessage = null) => {
+    const userText = customMessage || input;
+
+    if (!userText.trim()) return;
 
     setMessages((prev) => [...prev, { sender: "user", text: userText }]);
-
     setInput("");
     setLoading(true);
 
@@ -40,7 +47,7 @@ function CareerChatbot({ career, userProfile }) {
         ...prev,
         {
           sender: "bot",
-          text: data.reply.includes("offline")
+          text: data.reply?.includes("offline")
             ? "⚠️ " + data.reply
             : data.reply || "Sorry, I could not answer.",
         },
@@ -50,7 +57,7 @@ function CareerChatbot({ career, userProfile }) {
         ...prev,
         {
           sender: "bot",
-          text: "Chatbot is not connected. Make sure Flask backend is running.",
+          text: "⚠️ Chatbot is not connected. Make sure Flask backend is running.",
         },
       ]);
     } finally {
@@ -58,42 +65,88 @@ function CareerChatbot({ career, userProfile }) {
     }
   };
 
-  return (
-    <div className="bg-white rounded-3xl shadow-lg p-5 mt-8">
-      <h2 className="text-2xl font-bold text-indigo-700 mb-4">
-        SkillSakhi Career Chatbot
-      </h2>
+  const quickQuestions = [
+    "Give me a career roadmap",
+    "What skills should I learn?",
+    "Suggest resume tips",
+    "Which courses should I take?",
+    "How can I get an internship?",
+  ];
 
-      <div className="h-80 overflow-y-auto bg-gray-100 rounded-2xl p-4 space-y-3">
+  return (
+    <div className="bg-white rounded-3xl shadow-xl p-5 mt-8 border border-indigo-100">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-2xl font-bold text-indigo-700">
+            🤖 SkillSakhi AI Assistant
+          </h2>
+          <p className="text-sm text-gray-500">
+            Personalized career guidance for{" "}
+            <span className="font-semibold text-indigo-600">
+              {career?.career_name || "your selected career"}
+            </span>
+          </p>
+        </div>
+
+        <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
+          Online
+        </span>
+      </div>
+
+      {/* Chat Box */}
+      <div
+        ref={chatBoxRef}
+        className="h-80 overflow-y-auto bg-gray-100 rounded-2xl p-4 space-y-3"
+      >
+        {" "}
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`max-w-[80%] p-3 rounded-2xl text-sm ${
+            className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm shadow-sm leading-relaxed ${
               msg.sender === "user"
-                ? "bg-indigo-600 text-white ml-auto"
-                : "bg-white text-gray-800"
+                ? "bg-indigo-600 text-white ml-auto rounded-br-sm"
+                : "bg-white text-gray-800 border border-gray-100 rounded-bl-sm"
             }`}
           >
             {msg.text}
           </div>
         ))}
-
-        {loading && <p className="text-sm text-gray-500">Typing...</p>}
+        {loading && (
+          <div className="bg-white text-gray-500 border border-gray-100 px-4 py-3 rounded-2xl rounded-bl-sm max-w-[70%] shadow-sm animate-pulse">
+            🤖 Thinking...
+          </div>
+        )}
       </div>
 
-      <div className="flex gap-3 mt-4">
+      {/* Quick Questions */}
+      <div className="flex flex-wrap gap-2 mt-4">
+        {quickQuestions.map((question, index) => (
+          <button
+            key={index}
+            onClick={() => sendMessage(question)}
+            className="text-xs bg-indigo-100 text-indigo-700 px-3 py-2 rounded-full hover:bg-indigo-200 transition font-medium"
+          >
+            {question}
+          </button>
+        ))}
+      </div>
+
+      {/* Input */}
+      <div className="flex gap-2 mt-4 bg-gray-100 p-2 rounded-2xl border border-gray-200">
         <input
           type="text"
-          placeholder="Ask about skills, courses, roadmap..."
+          placeholder="Ask about skills, courses, roadmap, resume..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          className="flex-1 border rounded-xl px-4 py-3"
+          className="flex-1 bg-transparent outline-none px-3 text-sm"
         />
 
         <button
-          onClick={sendMessage}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold"
+          onClick={() => sendMessage()}
+          disabled={loading}
+          className="bg-indigo-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-indigo-700 transition disabled:opacity-50"
         >
           Send
         </button>

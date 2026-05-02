@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import { useAuth } from "../context/AuthContext";
 import CareerChatbot from "./CareerChatbot";
+import { useEffect } from "react";
 
 import {
   FaCheckCircle,
@@ -16,6 +17,16 @@ import {
 } from "react-icons/fa";
 
 function Results() {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+  
+  
+  
+  
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
@@ -219,7 +230,7 @@ function Results() {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                   <p className="text-lg font-semibold mb-2 text-white">
+                    <p className="text-lg font-semibold mb-2 text-white">
                       Confidence Score
                     </p>
                     <div className="w-full h-5 bg-white/20 rounded-full overflow-hidden">

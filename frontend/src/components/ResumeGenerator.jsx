@@ -5,10 +5,12 @@ import jsPDF from "jspdf";
 function ResumeGenerator() {
   const navigate = useNavigate();
 
-  const savedData = JSON.parse(localStorage.getItem("skillsakhi_results")) || {};
+  const savedData =
+    JSON.parse(localStorage.getItem("skillsakhi_results")) || {};
   const userProfile = savedData.user_profile || {};
   const careers = savedData.recommended_careers || [];
   const topCareer = careers[0] || {};
+  const [careerName, setCareerName] = useState(topCareer.career_name || "");
 
   const [template, setTemplate] = useState("ats");
   const [name, setName] = useState("");
@@ -39,11 +41,11 @@ function ResumeGenerator() {
           user_profile: {
             ...userProfile,
             name,
-            email,
-            phone,
-            location,
           },
-          career: topCareer,
+          career: {
+            ...topCareer,
+            career_name: careerName, // 👈 THIS IS KEY
+          },
         }),
       });
 
@@ -110,9 +112,10 @@ function ResumeGenerator() {
             <label className="font-semibold">Recommended Career</label>
             <input
               type="text"
-              value={topCareer.career_name || "No career selected"}
-              readOnly
-              className="w-full mt-2 border p-3 rounded-xl bg-gray-100"
+              value={careerName}
+              onChange={(e) => setCareerName(e.target.value)}
+              placeholder="Enter target career role"
+              className="w-full mt-2 border p-3 rounded-xl bg-white"
             />
           </div>
 

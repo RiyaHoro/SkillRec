@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import ResumeGenerator from "./components/ResumeGenerator";
 
+
 function App() {
   return (
     <AuthProvider>

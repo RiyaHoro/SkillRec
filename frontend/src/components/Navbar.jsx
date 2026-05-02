@@ -9,6 +9,7 @@ import {
 import { Sparkles } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { logout } from "../services/authService";
+import { FaFileAlt } from "react-icons/fa";
 
 function Navbar() {
   const location = useLocation();
@@ -74,7 +75,7 @@ function Navbar() {
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                 {currentUser.email?.charAt(0).toUpperCase()}
               </div>
-
+              {navItem("/resume-generator", "Resume", <FaFileAlt />)}
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 rounded-xl bg-red-500/80 text-white text-sm font-medium hover:bg-red-600 transition"
