@@ -183,7 +183,7 @@ function Panel({ title, icon, children }) {
 }
 
 function CareerMiniCard({ career, type }) {
-  const match = Math.round((career.match_score || 0) * 100);
+  const match = Math.round(career.match_score || 0);
 
   return (
     <div className="border rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition">
