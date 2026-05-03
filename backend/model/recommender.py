@@ -15,6 +15,30 @@ EDUCATION_ORDER = {
 }
 
 
+DOMAIN_KEYWORDS = {
+    "tech": [
+        "python", "java", "javascript", "react", "html", "css", "sql", "data",
+        "analytics", "machine learning", "ai", "backend", "frontend", "developer",
+        "programming", "coding", "api", "flask", "django", "power bi", "excel",
+        "statistics", "c++", "c", "system design"
+    ],
+    "creative": [
+        "interior", "fashion", "makeup", "beauty", "mehendi", "art", "craft",
+        "photography", "video", "design", "decor", "styling"
+    ],
+    "business": [
+        "business", "sales", "marketing", "reselling", "entrepreneur", "ecommerce",
+        "social media", "customer", "management"
+    ],
+    "education": [
+        "teaching", "teacher", "tutor", "children", "education", "school"
+    ],
+    "healthcare": [
+        "health", "nursing", "medical", "pharmacy", "lab", "nutrition", "fitness", "yoga"
+    ],
+}
+
+
 def safe_get(row, column, default=""):
     if column in row and pd.notna(row[column]):
         return str(row[column])
@@ -57,40 +81,32 @@ def parse_training_resources(resource_text):
 
 
 def build_learning_roadmap(career_name, missing_skills, matched_skills):
-    roadmap = []
-
-    roadmap.append({
-        "step": 1,
-        "title": "Build Foundation",
-        "description": "Start with basics and understand core concepts.",
-    })
-
-    if missing_skills:
-        roadmap.append({
+    return [
+        {
+            "step": 1,
+            "title": "Build Foundation",
+            "description": "Start with basics and understand core concepts.",
+        },
+        {
             "step": 2,
-            "title": "Learn Missing Skills",
-            "description": f"Focus on: {', '.join(missing_skills)}",
-        })
-    else:
-        roadmap.append({
-            "step": 2,
-            "title": "Strengthen Skills",
-            "description": "Improve your existing strengths.",
-        })
-
-    roadmap.append({
-        "step": 3,
-        "title": "Practice Projects",
-        "description": f"Work on real projects related to {career_name}.",
-    })
-
-    roadmap.append({
-        "step": 4,
-        "title": "Apply & Grow",
-        "description": "Build portfolio and apply for jobs, freelance work, or business opportunities.",
-    })
-
-    return roadmap
+            "title": "Learn Missing Skills" if missing_skills else "Strengthen Skills",
+            "description": (
+                f"Focus on: {', '.join(missing_skills)}"
+                if missing_skills
+                else "Improve your existing strengths."
+            ),
+        },
+        {
+            "step": 3,
+            "title": "Practice Projects",
+            "description": f"Work on real projects related to {career_name}.",
+        },
+        {
+            "step": 4,
+            "title": "Apply & Grow",
+            "description": "Build portfolio and apply for jobs, freelance work, or business opportunities.",
+        },
+    ]
 
 
 def normalize_education(education_text):
@@ -110,6 +126,44 @@ def normalize_education(education_text):
         return "5th"
 
     return "10th"
+
+
+def detect_domain(text):
+    text = str(text).lower()
+    domain_scores = {}
+
+    for domain, keywords in DOMAIN_KEYWORDS.items():
+        score = sum(1 for keyword in keywords if keyword in text)
+        domain_scores[domain] = score
+
+    best_domain = max(domain_scores, key=domain_scores.get)
+
+    if domain_scores[best_domain] == 0:
+        return "general"
+
+    return best_domain
+
+
+def domain_alignment_score(user_domain, career_domain):
+    if user_domain == "general" or career_domain == "general":
+        return 0.0
+
+    if user_domain == career_domain:
+        return 0.25
+
+    weak_matches = {
+        ("tech", "business"),
+        ("business", "tech"),
+        ("creative", "business"),
+        ("business", "creative"),
+        ("healthcare", "education"),
+        ("education", "healthcare"),
+    }
+
+    if (user_domain, career_domain) in weak_matches:
+        return 0.06
+
+    return -0.25
 
 
 class HybridCareerRecommender:
@@ -140,6 +194,17 @@ class HybridCareerRecommender:
         self.df["career_name"] = self.df["career_name"].astype(str).str.strip()
         self.df = self.df.drop_duplicates(subset=["career_name"], keep="first")
 
+        self.df["career_domain"] = self.df.apply(
+            lambda row: detect_domain(
+                f"{safe_get(row, 'career_name')} "
+                f"{safe_get(row, 'category')} "
+                f"{safe_get(row, 'interests')} "
+                f"{safe_get(row, 'required_skills')} "
+                f"{safe_get(row, 'description')}"
+            ),
+            axis=1,
+        )
+
         self.df["combined_text"] = self.df.apply(
             lambda row: clean_text(
                 f"{safe_get(row, 'career_name')} "
@@ -158,7 +223,12 @@ class HybridCareerRecommender:
             axis=1,
         )
 
-        self.vectorizer = TfidfVectorizer(stop_words="english")
+        self.vectorizer = TfidfVectorizer(
+            stop_words="english",
+            ngram_range=(1, 2),
+            min_df=1
+        )
+
         self.career_vectors = self.vectorizer.fit_transform(self.df["combined_text"])
 
         try:
@@ -196,10 +266,7 @@ class HybridCareerRecommender:
 
             filtered_rows.append(row)
 
-        if not filtered_rows:
-            return self.df.copy()
-
-        return pd.DataFrame(filtered_rows)
+        return pd.DataFrame(filtered_rows) if filtered_rows else self.df.copy()
 
     def calculate_demographic_score(self, row, user_data):
         score = 0.0
@@ -277,20 +344,23 @@ class HybridCareerRecommender:
 
         return list(dict.fromkeys(tags))
 
-    def build_explanation(self, row, user_data, matched_skills, missing_skills):
+    def build_explanation(self, row, user_data, matched_skills, missing_skills, user_domain, career_domain):
         career_name = safe_get(row, "career_name")
         interests = user_data.get("interests", "your selected interests")
 
         explanation = (
             f"{career_name} is recommended because it matches your interests in {interests} "
-            f"and your current profile."
+            f"and belongs to the {career_domain} domain."
         )
 
         if matched_skills:
-            explanation += f" You already have useful skills like {', '.join(matched_skills[:3])}."
+            explanation += f" You already have relevant skills like {', '.join(matched_skills[:3])}."
 
         if missing_skills:
             explanation += f" To improve readiness, learn {', '.join(missing_skills[:3])}."
+
+        if user_domain == career_domain and user_domain != "general":
+            explanation += " The career domain also aligns with your profile."
 
         if safe_get(row, "women_friendly").lower() == "yes":
             explanation += " This option is marked as women-friendly."
@@ -306,6 +376,19 @@ class HybridCareerRecommender:
     def recommend(self, user_data, top_n=5):
         filtered_df = self.filter_by_rules(user_data).copy()
 
+        user_text_raw = (
+            f"{user_data.get('education', '')} "
+            f"{user_data.get('interests', '')} "
+            f"{user_data.get('skills', '')} "
+            f"{user_data.get('career_goal', '')} "
+            f"{user_data.get('career_stage', '')} "
+            f"{user_data.get('personality_type', '')} "
+            f"{user_data.get('preferred_work_type', '')} "
+            f"{user_data.get('preferred_work_mode', '')}"
+        )
+
+        user_domain = detect_domain(user_text_raw)
+
         if self.category_classifier:
             try:
                 predicted_category = self.category_classifier.predict_category(user_data)
@@ -314,13 +397,16 @@ class HybridCareerRecommender:
         else:
             predicted_category = "Recommended Careers"
 
+        category_filtered_df = pd.DataFrame()
+
         if predicted_category and predicted_category != "Recommended Careers":
             category_filtered_df = filtered_df[
                 filtered_df["category"].astype(str).str.lower() == predicted_category.lower()
             ]
 
-            if not category_filtered_df.empty:
-                filtered_df = category_filtered_df.copy()
+        # Only use category filter if it still keeps enough options
+        if not category_filtered_df.empty and len(category_filtered_df) >= top_n:
+            filtered_df = category_filtered_df.copy()
 
         filtered_df["combined_text"] = filtered_df.apply(
             lambda row: clean_text(
@@ -341,17 +427,7 @@ class HybridCareerRecommender:
         )
 
         filtered_vectors = self.vectorizer.transform(filtered_df["combined_text"])
-
-        user_text = clean_text(
-            f"{user_data.get('education', '')} "
-            f"{user_data.get('interests', '')} "
-            f"{user_data.get('skills', '')} "
-            f"{user_data.get('career_goal', '')} "
-            f"{user_data.get('career_stage', '')} "
-            f"{user_data.get('personality_type', '')} "
-            f"{user_data.get('preferred_work_type', '')} "
-            f"{user_data.get('preferred_work_mode', '')}"
-        )
+        user_text = clean_text(user_text_raw)
 
         user_vector = self.vectorizer.transform([user_text])
         scores = cosine_similarity(user_vector, filtered_vectors).flatten()
@@ -379,29 +455,40 @@ class HybridCareerRecommender:
                 if s.strip()
             ]
 
-            matched_skills = [
-                skill for skill in required_skills
-                if skill in user_skills
-            ]
-
-            missing_skills = [
-                skill for skill in required_skills
-                if skill not in user_skills
-            ]
+            matched_skills = [skill for skill in required_skills if skill in user_skills]
+            missing_skills = [skill for skill in required_skills if skill not in user_skills]
 
             readiness = len(matched_skills) / len(required_skills) if required_skills else 0
             tfidf_score = float(scores[idx])
             demographic_score = self.calculate_demographic_score(row, user_data)
 
+            career_domain = safe_get(row, "career_domain", "general")
+            domain_score = domain_alignment_score(user_domain, career_domain)
+
+            exact_skill_bonus = 0.0
+            if matched_skills:
+                exact_skill_bonus = min(len(matched_skills) * 0.08, 0.24)
+
             final_score = (
-                0.55 * tfidf_score +
-                0.30 * readiness +
-                0.15 * demographic_score
+                0.40 * tfidf_score +
+                0.35 * readiness +
+                0.15 * demographic_score +
+                0.10 * max(domain_score, 0)
+                + exact_skill_bonus
             )
+
+            if domain_score < 0:
+                final_score += domain_score
+
+            if user_domain == "tech" and career_domain == "creative" and readiness == 0:
+                final_score -= 0.30
+
+            if user_domain == "tech" and any(x in career_name.lower() for x in ["designer", "makeup", "beauty", "interior", "fashion"]):
+                final_score -= 0.25
 
             final_score = max(0, min(final_score, 1))
 
-            if final_score < 0.04:
+            if final_score < 0.08:
                 continue
 
             career_query = career_name.replace(" ", "%20")
@@ -416,13 +503,11 @@ class HybridCareerRecommender:
                 "career_name": career_name,
                 "category": safe_get(row, "category"),
 
-                # IMPORTANT:
-                # Keep these as decimals because your frontend already multiplies by 100.
                 "match_score": round(final_score, 2),
                 "tfidf_score": round(tfidf_score, 2),
                 "demographic_score": round(demographic_score, 2),
+                "domain_score": round(domain_score, 2),
 
-                # Optional percentage values if you need them later.
                 "match_percent": round(final_score * 100),
                 "tfidf_percent": round(tfidf_score * 100),
                 "demographic_percent": round(demographic_score * 100),
@@ -449,6 +534,8 @@ class HybridCareerRecommender:
                     user_data,
                     matched_skills,
                     missing_skills,
+                    user_domain,
+                    career_domain,
                 ),
                 "readiness_score": round(readiness * 100),
                 "tags": self.generate_tags(row, user_data),
@@ -460,6 +547,8 @@ class HybridCareerRecommender:
                 "career_restart": safe_get(row, "career_restart"),
                 "investment_level": safe_get(row, "investment_level"),
                 "safety_level": safe_get(row, "safety_level"),
+                "career_domain": career_domain,
+                "user_domain": user_domain,
 
                 "job_links": job_links,
             })

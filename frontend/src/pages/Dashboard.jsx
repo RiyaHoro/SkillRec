@@ -21,6 +21,20 @@ function Dashboard() {
     JSON.parse(localStorage.getItem("skillsakhi_results")) || {};
   const careers = lastResult.recommended_careers || [];
 
+  const handleRemoveCareer = (careerName) => {
+    const updated = savedCareers.filter(
+      (career) => career.career_name !== careerName
+    );
+
+    localStorage.setItem(userKey, JSON.stringify(updated));
+    window.location.reload();
+  };
+
+  const handleClearAll = () => {
+    localStorage.removeItem(userKey);
+    window.location.reload();
+  };
+
   const handleLogout = async () => {
     await logout();
     navigate("/login");
@@ -29,7 +43,6 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-[#070816] px-6 py-10 text-white">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="bg-gradient-to-r from-indigo-700 to-purple-700 rounded-3xl p-8 shadow-xl flex flex-col md:flex-row justify-between gap-6">
           <div className="flex items-center gap-4">
             <FaUserCircle className="text-5xl text-white/90" />
@@ -56,7 +69,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Stats */}
         <div className="grid md:grid-cols-3 gap-6 mt-8">
           <StatCard
             title="Saved Careers"
@@ -78,7 +90,6 @@ function Dashboard() {
           />
         </div>
 
-        {/* Quick Actions */}
         <div className="grid md:grid-cols-3 gap-6 mt-8">
           <ActionCard
             title="Get Career Recommendations"
@@ -108,21 +119,41 @@ function Dashboard() {
           />
         </div>
 
-        {/* Saved + Last Results */}
         <div className="grid lg:grid-cols-2 gap-8 mt-8">
-          <Panel title="Saved Careers" icon={<FaHeart className="text-red-500" />}>
+          <Panel
+            title="Saved Careers"
+            icon={<FaHeart className="text-red-500" />}
+            action={
+              savedCareers.length > 0 && (
+                <button
+                  onClick={handleClearAll}
+                  className="text-sm text-red-500 hover:underline font-semibold"
+                >
+                  Clear All
+                </button>
+              )
+            }
+          >
             {savedCareers.length === 0 ? (
               <p className="text-gray-500">No saved careers yet.</p>
             ) : (
               <div className="space-y-4">
                 {savedCareers.map((career, i) => (
-                  <CareerMiniCard key={i} career={career} type="saved" />
+                  <CareerMiniCard
+                    key={i}
+                    career={career}
+                    type="saved"
+                    onRemove={handleRemoveCareer}
+                  />
                 ))}
               </div>
             )}
           </Panel>
 
-          <Panel title="Recent Recommendations" icon={<FaRedo className="text-indigo-600" />}>
+          <Panel
+            title="Recent Recommendations"
+            icon={<FaRedo className="text-indigo-600" />}
+          >
             {careers.length === 0 ? (
               <p className="text-gray-500">No recommendations generated yet.</p>
             ) : (
@@ -171,24 +202,40 @@ function ActionCard({ title, desc, icon, button, onClick, color }) {
   );
 }
 
-function Panel({ title, icon, children }) {
+function Panel({ title, icon, children, action }) {
   return (
     <div className="bg-white text-gray-900 rounded-3xl shadow-lg p-6">
-      <h2 className="text-2xl font-bold mb-5 flex items-center gap-2">
-        {icon} {title}
-      </h2>
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-2xl font-bold flex items-center gap-2">
+          {icon} {title}
+        </h2>
+        {action}
+      </div>
       {children}
     </div>
   );
 }
 
-function CareerMiniCard({ career, type }) {
+function CareerMiniCard({ career, type, onRemove }) {
   const match = Math.round(career.match_score || 0);
 
   return (
     <div className="border rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition">
-      <h3 className="font-bold text-lg">{career.career_name}</h3>
-      <p className="text-sm text-gray-500">{career.category}</p>
+      <div className="flex justify-between gap-3">
+        <div>
+          <h3 className="font-bold text-lg">{career.career_name}</h3>
+          <p className="text-sm text-gray-500">{career.category}</p>
+        </div>
+
+        {type === "saved" && (
+          <button
+            onClick={() => onRemove(career.career_name)}
+            className="text-red-500 text-xs font-semibold hover:underline"
+          >
+            Remove
+          </button>
+        )}
+      </div>
 
       <div className="mt-3 flex justify-between text-sm">
         {type === "saved" ? (

@@ -174,3 +174,55 @@ Spa Therapist,Beauty Career,10th,"wellness","therapy","Provide spa services.","S
 Hair Stylist,Beauty Career,10th,"beauty","hair styling","Hair styling.","Hair|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
 
 Nail Artist,Beauty Career,10th,"beauty,design","nail art","Nail services.","Nail|YouTube|Beginner|https://www.youtube.com","self-employment","flexible","yes","yes","low","high"
+
+Software Developer,Formal Job,Graduate,"coding,technology","python,java,c++,data structures,algorithms","Develop software applications.","DSA Course|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Frontend Developer,Formal Job,12th,"web,design","html,css,javascript,react","Build user interfaces for websites.","Frontend|freeCodeCamp|Beginner|https://www.freecodecamp.org","job/freelance","flexible","yes","yes","low","high"
+
+Backend Developer,Formal Job,Graduate,"coding,backend","python,node.js,api,sql","Develop server-side logic.","Backend|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Full Stack Developer,Formal Job,Graduate,"coding,web","html,css,javascript,node.js,react","Work on frontend and backend.","FullStack|YouTube|Beginner|https://www.youtube.com","job/freelance","flexible","yes","yes","low","high"
+
+Data Analyst,Formal Job,Graduate,"data,analytics","python,sql,excel,power bi","Analyze data and generate insights.","Google Data Analytics|Coursera|Beginner|https://www.coursera.org","job","office","yes","yes","low","high"
+
+Data Scientist,Formal Job,Graduate,"data,ai","python,machine learning,statistics","Build predictive models.","Data Science|Coursera|Intermediate|https://www.coursera.org","job","office","yes","yes","low","high"
+
+Machine Learning Engineer,Formal Job,Graduate,"ai,ml","python,tensorflow,pytorch","Develop ML models.","ML Course|YouTube|Intermediate|https://www.youtube.com","job","office","yes","yes","low","high"
+
+AI Engineer,Formal Job,Graduate,"ai,technology","python,deep learning,nlp","Build AI systems.","AI Course|YouTube|Intermediate|https://www.youtube.com","job","office","yes","yes","low","high"
+
+DevOps Engineer,Formal Job,Graduate,"cloud,automation","docker,kubernetes,aws","Manage deployment pipelines.","DevOps|YouTube|Intermediate|https://www.youtube.com","job","office","yes","yes","medium","high"
+
+Cloud Engineer,Formal Job,Graduate,"cloud,systems","aws,azure,cloud computing","Manage cloud infrastructure.","Cloud|Coursera|Intermediate|https://www.coursera.org","job","office","yes","yes","medium","high"
+
+Cybersecurity Analyst,Formal Job,Graduate,"security,network","network security,ethical hacking","Protect systems from cyber threats.","Cybersecurity|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Ethical Hacker,Formal Job,Graduate,"security,hacking","penetration testing,networking","Find vulnerabilities in systems.","Ethical Hacking|YouTube|Intermediate|https://www.youtube.com","job","flexible","yes","yes","low","medium"
+
+Mobile App Developer,Formal Job,Graduate,"apps,mobile","flutter,android,kotlin","Build mobile applications.","Flutter|YouTube|Beginner|https://www.youtube.com","job/freelance","flexible","yes","yes","low","high"
+
+Game Developer,Creative Tech,Graduate,"gaming,programming","unity,c#,game design","Develop video games.","Game Dev|YouTube|Beginner|https://www.youtube.com","job/freelance","flexible","yes","yes","medium","medium"
+
+UI Developer,Tech + Design,12th,"web,design","html,css,javascript,ui design","Create UI layouts.","UI Dev|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
+
+QA Tester,Formal Job,Graduate,"testing,software","manual testing,automation testing","Test software for bugs.","QA|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Automation Tester,Formal Job,Graduate,"testing,automation","selenium,java,testing","Automate testing processes.","Automation|YouTube|Intermediate|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Database Administrator,Formal Job,Graduate,"data,systems","sql,database management","Manage databases.","DBA|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+System Administrator,Formal Job,Graduate,"systems,network","linux,networking","Manage IT systems.","SysAdmin|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+
+Network Engineer,Formal Job,Graduate,"network,technology","networking,ccna","Manage networks.","Networking|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","medium","high"
+Technical Support Engineer,Formal Job,12th,"support,technology","troubleshooting,communication","Resolve technical issues.","Tech Support|YouTube|Beginner|https://www.youtube.com","job","flexible","yes","yes","low","high"
+Freelance Web Developer,Freelance,12th,"web,freelancing","html,css,javascript","Build websites for clients.","Freelance Web|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
+Freelance Data Analyst,Freelance,Graduate,"data,freelancing","excel,sql,python","Analyze freelance data projects.","Freelance Data|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
+Tech Blogger,Flexible Work,12th,"writing,technology","writing,seo,tech knowledge","Write about technology.","Tech Blog|YouTube|Beginner|https://www.youtube.com","freelance","home","yes","yes","low","high"
+YouTube Tech Creator,Creative Tech,12th,"video,technology","video editing,tech knowledge","Create tech content.","YouTube Tech|YouTube|Beginner|https://www.youtube.com","self-employment","home","yes","yes","low","medium"
+IT Support Specialist,Formal Job,12th,"support,technology","troubleshooting,it support","Provide IT help.","IT Support|Google|Beginner|https://www.coursera.org","job","office","yes","yes","low","high"
+Business Analyst (IT),Formal Job,Graduate,"business,data","analysis,communication","Bridge business and tech.","BA|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","low","high"
+Product Manager (Tech),Formal Job,Graduate,"product,management","communication,planning","Manage tech products.","PM|YouTube|Beginner|https://www.youtube.com","job","office","yes","yes","medium","high"
+Digital Marketing Specialist,Marketing Career,Graduate,"marketing,social media,online marketing","seo,content writing,social media,analytics,communication","Plan and manage digital marketing campaigns.","Digital Marketing|Google Skillshop|Beginner|https://skillshop.withgoogle.com","job","flexible","yes","yes","low","high"
+Social Media Manager,Marketing Career,12th,"social media,marketing,content creation","seo,content writing,canva,social media,analytics,communication","Manage social media pages and content strategy.","Social Media Marketing|HubSpot|Beginner|https://academy.hubspot.com","job/freelance","flexible","yes","yes","low","high"
+SEO Executive,Marketing Career,12th,"seo,marketing,content","seo,keyword research,content writing,google analytics","Improve website ranking on search engines.","SEO Course|YouTube|Beginner|https://www.youtube.com/results?search_query=seo+course","job","flexible","yes","yes","low","high"
+Content Marketing Executive,Marketing Career,Graduate,"marketing,writing,social media","content writing,seo,communication,copywriting","Create marketing content for brands.","Content Marketing|HubSpot|Beginner|https://academy.hubspot.com","job","flexible","yes","yes","low","high"

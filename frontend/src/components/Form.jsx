@@ -89,7 +89,7 @@ function Form() {
       !education ||
       !careerStage ||
       (selectedInterests.length === 0 && customInterests.trim() === "") ||
-      selectedSkills.length === 0
+      (selectedSkills.length === 0 && customSkills.trim() === "")
     ) {
       setError(
         "Please fill age, education, career stage, interests, and skills.",

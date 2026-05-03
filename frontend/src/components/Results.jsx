@@ -23,10 +23,7 @@ function Results() {
       behavior: "smooth",
     });
   }, []);
-  
-  
-  
-  
+
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
@@ -80,10 +77,7 @@ function Results() {
     );
   }
 
-  const accuracy = Math.max(
-    48,
-    Math.round((topCareer?.match_score || 0) ),
-  );
+  const accuracy = Math.max(48, Math.round(topCareer?.match_score || 0));
   const downloadPDF = () => {
     const doc = new jsPDF();
 
@@ -510,12 +504,21 @@ function Results() {
                               </p>
                             )}
                           </div>
-                          <button
-                            onClick={() => navigate("/resume-generator")}
-                            className="w-full bg-green-600 text-white py-4 my-3 rounded-2xl font-bold hover:bg-green-700"
-                          >
-                            Generate Resume & Cover Letter
-                          </button>
+                          {career.opportunity_type
+                            ?.toLowerCase()
+                            .includes("job") ? (
+                            <button
+                              onClick={() => navigate("/resume-generator")}
+                              className="w-full bg-green-600 text-white py-4 my-3 rounded-2xl font-bold hover:bg-green-700"
+                            >
+                              Generate Resume & Cover Letter
+                            </button>
+                          ) : (
+                            <div className="w-full bg-yellow-100 text-yellow-800 py-4 my-3 rounded-2xl font-semibold text-center">
+                              💡 Suggested: Create a Business Plan or Portfolio
+                              instead
+                            </div>
+                          )}
                           {/* JOB OPPORTUNITIES */}
                           <div className="mt-6">
                             <p className="font-semibold text-gray-800 mb-3">
