@@ -27,13 +27,11 @@ function Assessment() {
   ];
 
   const selectAnswer = (question) => {
-    const exists = selectedQuestions.some(
-      (q) => q.text === question.text
-    );
+    const exists = selectedQuestions.some((q) => q.text === question.text);
 
     if (exists) {
       setSelectedQuestions(
-        selectedQuestions.filter((q) => q.text !== question.text)
+        selectedQuestions.filter((q) => q.text !== question.text),
       );
     } else {
       setSelectedQuestions([...selectedQuestions, question]);
@@ -41,7 +39,7 @@ function Assessment() {
   };
 
   const getPersonality = () => {
-    if (selectedQuestions.length === 0) return "General";
+    if (selectedQuestions.length === 0) return { main: "General", scores: {} };
 
     const count = {};
 
@@ -49,13 +47,27 @@ function Assessment() {
       count[q.type] = (count[q.type] || 0) + 1;
     });
 
-    return Object.keys(count).reduce((a, b) =>
-      count[a] > count[b] ? a : b
-    );
+    // Convert to percentage
+    const total = selectedQuestions.length;
+    const scores = {};
+
+    Object.keys(count).forEach((key) => {
+      scores[key] = Math.round((count[key] / total) * 100);
+    });
+
+    // Sort personalities
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+
+    return {
+      main: sorted[0][0],
+      secondary: sorted[1]?.[0] || null,
+      scores,
+    };
   };
 
   const handleSubmit = () => {
-    const personality = getPersonality();
+    const personalityData = getPersonality();
+    const personality = personalityData.main;
 
     const resultData = assessmentMap[personality] || {
       title: "General Profile",
@@ -65,7 +77,12 @@ function Assessment() {
       nextStep: "Explore different careers and build skills gradually.",
     };
 
-    const finalResult = { personality, ...resultData };
+    const finalResult = {
+      personality,
+      personalityScores: personalityData.scores,
+      secondaryPersonality: personalityData.secondary,
+      ...resultData,
+    };
     setResult(finalResult);
 
     const oldData =
@@ -126,6 +143,33 @@ function Assessment() {
             <p className="text-gray-700 mb-2">
               <b>Personality Type:</b> {result.personality}
             </p>
+            {result.secondaryPersonality && (
+              <p className="text-gray-700 mb-2">
+                <b>Secondary Trait:</b> {result.secondaryPersonality}
+              </p>
+            )}
+
+            <div className="mb-4">
+              <b>Personality Breakdown:</b>
+              <div className="mt-2 space-y-2">
+                {Object.entries(result.personalityScores || {}).map(
+                  ([key, val]) => (
+                    <div key={key}>
+                      <div className="flex justify-between text-sm">
+                        <span>{key}</span>
+                        <span>{val}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full"
+                          style={{ width: `${val}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
 
             <p className="text-gray-700 mb-3">
               <b>Work Style:</b> {result.workStyle}
@@ -154,9 +198,7 @@ function Assessment() {
               </div>
             </div>
 
-            <p className="mt-2 font-medium">
-              Next Step: {result.nextStep}
-            </p>
+            <p className="mt-2 font-medium">Next Step: {result.nextStep}</p>
 
             <button
               onClick={() => {

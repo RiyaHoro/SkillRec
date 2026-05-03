@@ -637,18 +637,26 @@ function Results() {
 
               <div className="space-y-3 text-lg">
                 <p>
-                  <span className="font-semibold">Model:</span> Hybrid TF-IDF +
-                  Rules
+                  <span className="font-semibold">Model:</span> Hybrid
+                  Recommendation System
                 </p>
+
+                <p>
+                  <span className="font-semibold">Methods:</span> TF-IDF +
+                  Cosine Similarity + Rule-Based Filtering + Domain Scoring
+                </p>
+
                 <p>
                   <span className="font-semibold">Accuracy:</span> {accuracy}%
                 </p>
+
                 <p>
                   <span className="font-semibold">Top Careers:</span>{" "}
                   {careers.length}
                 </p>
+
                 <p>
-                  <span className="font-semibold">Dataset Size:</span> 100+
+                  <span className="font-semibold">Dataset Size:</span> 130+
                   careers
                 </p>
               </div>

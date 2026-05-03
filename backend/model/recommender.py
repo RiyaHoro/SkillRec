@@ -3,6 +3,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from model.preprocess import clean_text, normalize_list_from_text
 from model.career_classifier import CareerCategoryClassifier
+from database import get_careers_data
 
 
 EDUCATION_ORDER = {
@@ -169,8 +170,9 @@ def domain_alignment_score(user_domain, career_domain):
 class HybridCareerRecommender:
 
     def __init__(self, csv_path="data/careers.csv"):
-        self.df = pd.read_csv(csv_path, on_bad_lines="skip").fillna("")
+        
 
+        self.df = get_careers_data(csv_path).fillna("")
         required_columns = [
             "career_name",
             "category",
