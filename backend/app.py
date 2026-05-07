@@ -214,11 +214,13 @@ RELEVANT KEYWORDS
 """
 
     cover_letter = f"""
+    Note: This is sample cover letter format it according to your need.
+    
 Dear Hiring Manager,
 
 I am writing to express my interest in the {career_name} role.
 
-I have an educational background in {education} and an interest in {category}. I am developing skills in {", ".join(core_skills[:5])} and building practical projects to improve my job readiness.
+I have an educational background in --mention your education-- and an interest in {category}. I am developing skills in {", ".join(core_skills[:5])} and building practical projects to improve my job readiness.
 
 I am a quick learner, sincere, and motivated to grow professionally. I would be grateful for the opportunity to contribute to your organization and continue learning in this field.
 

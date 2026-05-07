@@ -182,10 +182,10 @@ function Results() {
                 </div>
 
                 <div className="min-w-[160px] text-center">
-                  <p className="text-gray-500 text-lg">Model Accuracy</p>
+                  {/* <p className="text-gray-500 text-lg">Model Accuracy</p>
                   <h3 className="text-5xl font-extrabold text-blue-600 mt-2">
                     {accuracy}%
-                  </h3>
+                  </h3> */}
                 </div>
               </div>
             </div>
@@ -646,9 +646,9 @@ function Results() {
                   Cosine Similarity + Rule-Based Filtering + Domain Scoring
                 </p>
 
-                <p>
+                {/* <p>
                   <span className="font-semibold">Accuracy:</span> {accuracy}%
-                </p>
+                </p> */}
 
                 <p>
                   <span className="font-semibold">Top Careers:</span>{" "}

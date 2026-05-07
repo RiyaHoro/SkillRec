@@ -352,7 +352,7 @@ class HybridCareerRecommender:
 
         explanation = (
             f"{career_name} is recommended because it matches your interests in {interests} "
-            f"and belongs to the {career_domain} domain."
+            
         )
 
         if matched_skills:
